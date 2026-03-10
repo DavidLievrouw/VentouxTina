@@ -75,12 +75,6 @@ a { color: var(--color-brand); }
     flex: 1;
 }
 
-.brand-link {
-    font-weight: 700;
-    font-size: 1.1rem;
-    text-decoration: none;
-    color: var(--color-brand);
-}
 
 .nav-links {
     list-style: none;
@@ -101,26 +95,6 @@ a { color: var(--color-brand); }
 
 .nav-links a:hover { border-color: var(--color-brand); }
 
-/* Hamburger button — hidden on desktop */
-.hamburger-btn {
-    display: none;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 1.6rem;
-    height: 1.2rem;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    margin-left: auto;
-}
-.hamburger-btn span {
-    display: block;
-    height: 2px;
-    background: var(--color-text);
-    border-radius: 2px;
-    transition: background 0.2s;
-}
 
 /* ── Dark-mode toggle ────────────────────────────────────────────────────── */
 .dark-mode-toggle {
@@ -136,15 +110,6 @@ a { color: var(--color-brand); }
 }
 .dark-mode-toggle:hover { background: var(--color-brand-light); }
 
-/* ── Home page hero ──────────────────────────────────────────────────────── */
-.hero-section {
-    text-align: center;
-    padding: 2.5rem 1rem 1.5rem;
-    background: linear-gradient(135deg, var(--color-brand) 0%, #1d4ed8 100%);
-    color: #fff;
-}
-.hero-title { margin: 0 0 0.5rem; font-size: 1.8rem; }
-.hero-subtitle { margin: 0; font-size: 1rem; opacity: 0.9; }
 
 /* ── Sections ────────────────────────────────────────────────────────────── */
 .section {
@@ -289,27 +254,12 @@ a { color: var(--color-brand); }
 
 /* ── Responsive — mobile ─────────────────────────────────────────────────── */
 @media (max-width: 640px) {
-    .hamburger-btn { display: flex; }
-
     .nav-links {
-        display: none;
-        position: absolute;
-        top: calc(var(--header-height));
-        left: 0;
-        right: 0;
-        background: var(--color-surface);
-        border-bottom: 1px solid var(--color-border);
         flex-direction: column;
         gap: 0;
-        padding: 0.5rem 0;
-        z-index: 200;
-        box-shadow: 0 4px 8px rgba(0,0,0,.1);
     }
-    .nav-links.open { display: flex; }
     .nav-links li a { display: block; padding: 0.75rem 1.5rem; border-bottom: none; }
 
-    .hero-title { font-size: 1.4rem; }
-    .hero-subtitle { font-size: 0.9rem; }
 
     .leaflet-map { height: 260px; }
 

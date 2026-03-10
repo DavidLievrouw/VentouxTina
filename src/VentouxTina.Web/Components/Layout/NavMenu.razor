@@ -1,29 +1,8 @@
-﻿<nav class="navbar" role="navigation" aria-label="Hoofdnavigatie">
-    <div class="navbar-brand">
-        <a href="/" class="brand-link">Ventoux Tina</a>
-    </div>
-
-    <button class="hamburger-btn"
-            aria-label="Menu openen of sluiten"
-            aria-expanded="@_menuOpen"
-            aria-controls="nav-links"
-            @onclick="ToggleMenu">
-        <span></span>
-        <span></span>
-        <span></span>
-    </button>
-
-    <ul id="nav-links" class="nav-links @(_menuOpen ? "open" : "")">
-        <li><a href="#kaart" @onclick="CloseMenu">Kaart</a></li>
-        <li><a href="#context" @onclick="CloseMenu">Initiatief</a></li>
-        <li><a href="#logboek" @onclick="CloseMenu">Logboek</a></li>
+﻿﻿<nav class="navbar" role="navigation" aria-label="Hoofdnavigatie">
+    <ul id="nav-links" class="nav-links">
+        <li><a href="#kaart">Kaart</a></li>
+        <li><a href="#context">Initiatief</a></li>
+        <li><a href="#logboek">Logboek</a></li>
     </ul>
 </nav>
 
-@code {
-    private bool _menuOpen;
-
-    private void ToggleMenu() => _menuOpen = !_menuOpen;
-
-    private void CloseMenu() => _menuOpen = false;
-}

@@ -79,7 +79,7 @@ builder.Services.AddRateLimiter(options =>
 });
 
 // ── Blazor / Razor components ─────────────────────────────────────────────────
-builder.Services.AddRazorComponents();
+builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
 // ── Localization (nl-BE) ──────────────────────────────────────────────────────
 builder.Services.AddLocalization();
@@ -100,7 +100,7 @@ app.UseRateLimiter();
 app.UseAntiforgery();
 
 app.MapStaticAssets();
-app.MapRazorComponents<App>();
+app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
 // ── API endpoints ─────────────────────────────────────────────────────────────
 app.MapPublicEndpoints();
