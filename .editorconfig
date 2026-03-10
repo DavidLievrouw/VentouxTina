@@ -1,0 +1,17 @@
+﻿# EditorConfig is awesome: https://EditorConfig.org
+# top-most EditorConfig file
+root = true
+
+# All files
+[*]
+charset = utf-8
+
+# Roslynator
+dotnet_analyzer_diagnostic.category-roslynator.severity = warning
+roslynator_analyzers.enabled_by_default = true
+roslynator_refactorings.enabled = true
+roslynator_compiler_diagnostic_fixes.enabled = true
+dotnet_diagnostic.rcs1201.severity = suggestion # Use method chaining
+
+# ReSharper
+resharper_convert_to_primary_constructor_highlighting = none
