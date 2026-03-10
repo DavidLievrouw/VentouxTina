@@ -27,16 +27,15 @@
   Traveled distance is capped at total route distance for a stable 0-100% indicator.
 - Alternatives considered:
   - Recalculate route distance dynamically from mapping APIs: rejected for cost/latency variability.
-  - Trust precomputed percentage values from source file: rejected to prevent drift and data inconsistencies.
+  - Trust precomputed percentage values from a persisted column: rejected to prevent drift and data inconsistencies.
 
-## Decision 4: Log source format handling
+## Decision 4: Data source and startup provisioning
 
-- Decision: Support both JSON and YAML input files with a deterministic priority rule and strict validation.
-- Rationale: Matches the manual-maintenance requirement while keeping operational flexibility.
-  Validation prevents negative distances, invalid dates, and unsupported activity values.
+- Decision: Use MariaDB as the single source for trip logs, route, and checkpoints; on startup provision schema and apply pending EF Core migrations when present.
+- Rationale: Centralized data avoids file drift, supports manual DB maintenance, and keeps startup behavior deterministic.
 - Alternatives considered:
-  - JSON-only: rejected because YAML support is explicitly requested.
-  - Database storage: rejected because the requested workflow is manual file updates.
+  - Manual JSON/YAML files: rejected due to operational inconsistency and schema drift risk.
+  - Startup without migration execution: rejected because it increases deployment fragility.
 
 ## Decision 5: UI stack, modern look, and responsive navigation
 
@@ -90,3 +89,19 @@
 - Alternatives considered:
   - Minimal logging only: rejected because throttling behavior needs auditable visibility.
   - Full distributed tracing stack from day one: deferred as optional enhancement.
+
+## Decision 11: Progress projection strategy
+
+- Decision: Do not persist TripProgressSnapshot; compute progress projection in-memory from route + log data and cache it for 1 minute.
+- Rationale: Removes manual maintenance burden and lowers database read pressure for public traffic.
+- Alternatives considered:
+  - Persisted snapshot table: rejected because it introduces synchronization complexity.
+  - Recompute on every request without cache: rejected for unnecessary DB load.
+
+## Decision 12: Route/checkpoint seed approach
+
+- Decision: Provide a one-time PowerShell script that fetches route data from a free route planner API and seeds `TripRoute` + checkpoints.
+- Rationale: Ensures reproducible baseline data with minimal manual effort.
+- Alternatives considered:
+  - Manual SQL-only entry: rejected due to high error risk for long route geometry.
+  - Paid planner API: rejected to keep costs low.

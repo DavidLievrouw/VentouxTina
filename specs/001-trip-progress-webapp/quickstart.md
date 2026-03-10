@@ -99,6 +99,13 @@ Stop services and remove database state volume:
 docker compose down -v
 ```
 
+Run one-time route/checkpoint seed after first successful startup:
+
+```powershell
+Set-Location src
+pwsh .\scripts\seed-route.ps1
+```
+
 Expected Docker characteristics:
 
 - Multi-stage build
@@ -113,3 +120,4 @@ Expected Docker characteristics:
 - Rate limit policy returns `429` when threshold exceeded
 - UI remains usable on mobile viewport widths
 - MariaDB-data blijft behouden na `docker compose down` en opnieuw `docker compose up`
+- Bij applicatiestart worden pending EF Core migraties automatisch toegepast

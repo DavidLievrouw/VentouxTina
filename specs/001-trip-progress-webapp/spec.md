@@ -12,6 +12,8 @@
 - Q: Welke projectcontext moet expliciet zichtbaar zijn voor bezoekers? → A: Het project is een liefdadigheidsactie/fondsenwerving voor "Klimmen tegen MS" met streefdoel 500 euro, en backers volgen Tina's voortgang via deze webapplicatie.
 - Q: Moet de triplog uit JSON/YAML of uit een database komen? → A: Gebruik een database; entries worden manueel toegevoegd in MariaDB, met Entity Framework Core als data-toegangslaag.
 - Q: Moet enkel de contexttekst Nederlands zijn, en is lokale compose-orkestratie nodig? → A: De volledige UI moet Nederlands zijn; er moet een `docker-compose.yml` aanwezig zijn met alle vereiste services en een persistente MariaDB-volume.
+- Q: Hoe moeten provisioning, route-seeding en voortgangsberekening technisch gebeuren? → A: De app moet bij startup de database provisionen en EF Core migraties uitvoeren indien aanwezig; er komt een eenmalig PowerShell-script dat TripRoute en checkpoints vult op basis van een gratis routeplanner; TripProgressSnapshot wordt niet manueel of persistent beheerd, maar per request in geheugen geprojecteerd en 1 minuut gecachet.
+- Q: Hoe ver mag de getekende voortgangslijn op de kaart lopen? → A: Exact tot de gecumuleerde kilometers uit `TripLogEntry`, begrensd op de totale routeafstand.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -27,7 +29,7 @@ de pagina te openen, en te verifiëren dat de volledige route zichtbaar is en he
 
 **Acceptance Scenarios**:
 
-1. **Given** een geldige route en loggegevens met afgelegde kilometers, **When** de bezoeker de pagina opent, **Then** ziet de bezoeker de volledige route en een gemarkeerd segment dat de afgelegde afstand voorstelt.
+1. **Given** een geldige route en loggegevens met afgelegde kilometers, **When** de bezoeker de pagina opent, **Then** ziet de bezoeker de volledige route en een gemarkeerd segment dat exact de gecumuleerde afgelegde afstand voorstelt.
 2. **Given** loggegevens met een cumulatieve afstand van 0 km, **When** de pagina laadt, **Then** blijft de volledige route zichtbaar en staat het voortgangssegment op 0%.
 3. **Given** loggegevens met cumulatieve afstand gelijk aan of groter dan de routeafstand, **When** de pagina laadt, **Then** toont de kaart 100% afgelegd en markeert de toepassing de tocht als voltooid.
 
@@ -91,6 +93,7 @@ te valideren dat de lijst en voortgangsberekening automatisch de bijgewerkte waa
 - Hoe gaat het systeem om met cumulatieve kilometers boven de totale routeafstand: voortgang wordt begrensd op 100%.
 - Wat gebeurt er wanneer MariaDB tijdelijk niet bereikbaar is: de toepassing toont een duidelijke foutmelding en blijft degradeerbaar beschikbaar voor statische context.
 - Wat gebeurt er wanneer een UI-fragment onbedoeld niet-Nederlandse tekst bevat: de build/test pipeline markeert dit als afwijking.
+- Wat gebeurt er wanneer migraties ontbreken of falen bij startup: de toepassing logt dit expliciet en start niet in een half-gemigreerde toestand.
 
 ## Requirements *(mandatory)*
 
@@ -117,6 +120,13 @@ te valideren dat de lijst en voortgangsberekening automatisch de bijgewerkte waa
 - **FR-017**: Alle zichtbare UI-teksten (navigatie, sectietitels, labels, knoppen, statusmeldingen en foutmeldingen) MUST in het Nederlands (Belgie) zijn.
 - **FR-018**: Er MUST een `docker-compose.yml` aanwezig zijn voor lokale uitvoering met minimaal webapp- en MariaDB-service.
 - **FR-019**: De compose-configuratie MUST een persistente volume voor MariaDB-datastatus definiëren.
+- **FR-020**: De applicatie MUST bij startup de database provisionen en EF Core migraties uitvoeren indien er migraties in de codebase aanwezig zijn.
+- **FR-021**: Er MUST een eenmalig PowerShell-script aanwezig zijn dat de tabellen `TripRoute` en checkpoints initieel vult.
+- **FR-022**: Het seedscript MUST route- en checkpointdata ophalen via een gratis derde routeplanner.
+- **FR-023**: `TripProgressSnapshot` MUST niet persistent opgeslagen of manueel onderhouden worden.
+- **FR-024**: De toepassing MUST voortgang projecteren in-memory op basis van geladen route- en logdata.
+- **FR-025**: De in-memory voortgangsprojectie MUST 1 minuut gecachet worden om databasebelasting te verlagen.
+- **FR-026**: De getekende voortgangslijn op de kaart MUST exact overeenkomen met de gecumuleerde kilometers uit `TripLogEntry` en mag nooit verder lopen dan de totale routeafstand.
 
 ### Constitution Alignment *(mandatory)*
 
@@ -130,6 +140,8 @@ te valideren dat de lijst en voortgangsberekening automatisch de bijgewerkte waa
   routevoortgangsberekening, databasevalidatie en UI-weergave van vereiste secties.
 - **CA-004 Container Delivery Impact**: De feature vereist containeruitvoering als standaard distributievorm,
   met configureerbare MariaDB-connectie via omgevingsconfiguratie en lokale compose-orkestratie.
+- **CA-004a Startup Provisioning**: Startup-flow bevat database provisioning en conditionele migratie-uitvoering met duidelijke foutlogging.
+- **CA-004b Runtime Efficiency**: Progress projectie draait in-memory met 1-minuut cache zodat read-endpoints niet elke call de database aanspreken.
 - **CA-005 Standards and Transparency**: De feature gebruikt actuele stabiele runtime- en afhankelijkheidsversies,
   en documenteert het publieke gegevensschema voor logregels en voortgangsuitvoer.
 
@@ -137,7 +149,7 @@ te valideren dat de lijst en voortgangsberekening automatisch de bijgewerkte waa
 
 - **TripRoute**: Canonieke trajectdefinitie tussen startpunt en eindpunt, inclusief totale afstand en routegeometrie.
 - **TripLogEntry**: Een logregel met datum, afgelegde kilometers en activiteitstype.
-- **TripProgressSnapshot**: Afgeleide projectie van totale afgelegde afstand, resterende afstand en voortgangspercentage.
+- **ProgressProjection**: Niet-persistente, in-memory afgeleide projectie van totale afgelegde afstand, resterende afstand en voortgangspercentage.
 - **ProjectContext**: Statische tekstinhoud die het doel van het initiatief en de relatie met "Klimmen tegen MS" beschrijft.
 - **FundraisingGoal**: Domeinwaarde met doelbedrag (500 euro) en beschrijving van de liefdadigheidscontext.
 
@@ -145,6 +157,7 @@ te valideren dat de lijst en voortgangsberekening automatisch de bijgewerkte waa
 
 - De routeafstand is vooraf bepaald en beheerd als vaste referentiewaarde voor alle voortgangsberekeningen.
 - De beheerder voegt records manueel toe of wijzigt records manueel in MariaDB voor de actieve omgeving.
+- `TripRoute` en checkpoints worden initieel gevuld via een eenmalig PowerShell-seedscript.
 - De publieke pagina vereist geen gebruikersaanmelding.
 - Deze feature omvat geen online donatieverwerking; ze communiceert enkel de fondsenwervingscontext en doelstelling.
 - Activiteiten kunnen intern als gestandaardiseerde waarden worden opgeslagen, maar worden in de UI in het Nederlands getoond.
@@ -160,3 +173,7 @@ te valideren dat de lijst en voortgangsberekening automatisch de bijgewerkte waa
 - **SC-005**: In 100% van de gecontroleerde paginaweergaven is de vermelding van liefdadigheidsdoel en 500 euro streefbedrag zichtbaar in de contextsectie.
 - **SC-006**: In 100% van de gecontroleerde paginaweergaven zijn alle zichtbare UI-teksten Nederlandstalig (Belgie).
 - **SC-007**: Een lokale `docker compose up` start webapp en MariaDB succesvol, en MariaDB-data blijft behouden na herstart.
+- **SC-008**: Bij startup worden aanwezige EF Core migraties automatisch toegepast zonder manuele tussenstappen.
+- **SC-009**: Het eenmalige route-seedscript vult `TripRoute` en checkpoints met bruikbare data via een gratis routeplanner.
+- **SC-010**: Onder normale belasting resulteert 1-minuut cache in merkbaar minder database-reads voor progress-endpoints.
+- **SC-011**: In 100% van de verificatietests stemt de lengte van de getekende voortgangslijn overeen met de gecumuleerde `TripLogEntry`-kilometers (met begrenzing op route-einde).

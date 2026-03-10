@@ -9,9 +9,11 @@
   - `endName` (string, required, fixed: Mont Ventoux)
   - `totalDistanceKm` (decimal, required, > 0)
   - `polyline` (ordered coordinate list, required)
-  - `checkpoints` (optional ordered list with cumulative distances)
+  - `checkpoints` (ordered list with cumulative distances)
+- Seed source:
+  - One-time PowerShell script fetches route geometry/checkpoints from a free route planner API.
 - Relationships:
-  - One `TripRoute` is used by many `TripProgressSnapshot` calculations.
+  - One `TripRoute` is used by many runtime progress projections.
 
 ## Entity: TripLogEntry
 
@@ -29,7 +31,7 @@
   - `activity` must match allowed values.
   - Duplicate `entryId` values are invalid.
 - Relationships:
-  - Many `TripLogEntry` records contribute to one `TripProgressSnapshot`.
+  - Many `TripLogEntry` records contribute to one runtime progress projection.
 
 ## Entity: FundraisingGoal
 
@@ -49,9 +51,10 @@
   - `bodyText` (string, required)
   - `fundraisingGoalText` (string, required, includes EUR 500 mention)
 
-## Entity: TripProgressSnapshot
+## Read Model: ProgressProjection (Transient, Non-Persistent)
 
-- Purpose: Derived read model for UI and API output.
+- Purpose: Derived in-memory projection for UI and API output.
+- Persistence: Not stored in database and never manually maintained.
 - Fields:
   - `asOfDate` (date-time, required)
   - `totalDistanceKm` (decimal, required)
@@ -63,8 +66,10 @@
 - Derivation rules:
   - `traveledDistanceKm` = sum(valid `TripLogEntry.kilometers`)
   - `traveledDistanceKm` capped at `totalDistanceKm`
+  - `traveledPolyline` length corresponds to `traveledDistanceKm` along canonical route geometry
   - `progressPercent` = `(traveledDistanceKm / totalDistanceKm) * 100`
   - `remainingDistanceKm` = `max(totalDistanceKm - traveledDistanceKm, 0)`
+  - Computed projection is cached in-memory for 1 minute.
 
 ## State Transitions
 
@@ -77,9 +82,18 @@
 - `completed` -> `in-progress`
   - Trigger: correction entry reduces cumulative kilometers below route total (must be explicitly marked)
 
-## Source ingestion transitions
+## Data ingestion transitions
 
-- `source-valid` -> `source-invalid`
-  - Trigger: parse error, schema mismatch, invalid field values
-- `source-invalid` -> `source-valid`
-  - Trigger: source file fixed and passes validation
+- `records-valid` -> `records-invalid`
+  - Trigger: invalid manually entered DB records (date/kilometers/activity constraints)
+- `records-invalid` -> `records-valid`
+  - Trigger: DB records are corrected and pass validation rules
+
+## Startup data lifecycle transitions
+
+- `schema-pending` -> `schema-ready`
+  - Trigger: application startup provisions database and applies pending EF Core migrations
+- `route-not-seeded` -> `route-seeded`
+  - Trigger: one-time PowerShell route seed script writes `TripRoute` and checkpoints
+- `projection-cache-miss` -> `projection-cache-hit`
+  - Trigger: first projection computed and stored in-memory cache with 1-minute TTL

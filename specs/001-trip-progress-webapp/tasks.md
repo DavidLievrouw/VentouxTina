@@ -32,10 +32,14 @@
 - [ ] T010 Create EF Core DbContext and base DB entities in src/VentouxTina.Web/Infrastructure/DataSources/VentouxTinaDbContext.cs
 - [ ] T011 Create EF Core entity mappings in src/VentouxTina.Web/Infrastructure/DataSources/Configurations/TripLogEntryConfiguration.cs and src/VentouxTina.Web/Infrastructure/DataSources/Configurations/ProjectContextConfiguration.cs
 - [ ] T012 Add initial MariaDB migration in src/VentouxTina.Web/Infrastructure/DataSources/Migrations/
+- [ ] T012a [P] Add startup database provisioning and conditional migration execution in src/VentouxTina.Web/Program.cs
+- [ ] T012b [P] Add startup migration logging/failure handling in src/VentouxTina.Web/Infrastructure/DataSources/StartupMigrationRunner.cs
 - [ ] T013 [P] Implement canonical route model and constants in src/VentouxTina.Web/Domain/Models/TripRoute.cs
-- [ ] T014 [P] Implement TripLogEntry, FundraisingGoal, ProjectContext, and TripProgressSnapshot domain models in src/VentouxTina.Web/Domain/Models/
+- [ ] T014 [P] Implement TripLogEntry, FundraisingGoal, and ProjectContext domain models in src/VentouxTina.Web/Domain/Models/
+- [ ] T014a [P] Implement TripCheckpoint domain model in src/VentouxTina.Web/Domain/Models/TripCheckpoint.cs
 - [ ] T015 Implement domain validation services for dates/kilometers/activity in src/VentouxTina.Web/Domain/Validation/TripLogValidator.cs
-- [ ] T016 Implement progress calculation functional core in src/VentouxTina.Web/Domain/Services/ProgressCalculator.cs
+- [ ] T016 Implement progress calculation functional core and transient ProgressProjection read model in src/VentouxTina.Web/Domain/Services/ProgressCalculator.cs and src/VentouxTina.Web/Domain/Models/ProgressProjection.cs
+- [ ] T016a [P] Add 1-minute in-memory cache policy for progress projection in src/VentouxTina.Web/Domain/Services/CachedProgressService.cs
 - [ ] T017 [P] Register EF Core, repositories, and domain services in src/VentouxTina.Web/Program.cs
 - [ ] T018 [P] Configure ASP.NET Core rate limiting policies and 429 handling in src/VentouxTina.Web/Program.cs
 - [ ] T019 [P] Configure request logging and correlation ID middleware in src/VentouxTina.Web/Program.cs
@@ -59,11 +63,13 @@
 - [ ] T024 [P] [US1] Add unit tests for route capping and status transitions in src/VentouxTina.Tests.Unit/Domain/Services/ProgressStatusTests.cs
 - [ ] T025 [P] [US1] Add API contract tests for GET /api/progress in src/VentouxTina.Tests.Integration/Api/GetProgressContractTests.cs
 - [ ] T026 [P] [US1] Add integration test for map progress payload consistency in src/VentouxTina.Tests.Integration/Api/MapProgressIntegrationTests.cs
+- [ ] T026a [P] [US1] Add integration test verifying rendered map line distance equals cumulative TripLogEntry kilometers (capped) in src/VentouxTina.Tests.Integration/UI/MapLineDistanceTests.cs
 
 ### Implementation for User Story 1
 
 - [ ] T027 [P] [US1] Implement route projection service for traveled polyline in src/VentouxTina.Web/Domain/Services/RouteProjectionService.cs
 - [ ] T028 [US1] Implement progress query service using EF Core + functional core in src/VentouxTina.Web/Infrastructure/DataSources/ProgressQueryService.cs
+- [ ] T028a [US1] Implement cache-aware progress query flow to avoid DB access on hot reads in src/VentouxTina.Web/Infrastructure/DataSources/ProgressQueryService.cs
 - [ ] T029 [US1] Implement GET /api/progress endpoint behavior in src/VentouxTina.Web/Api/PublicEndpoints.cs
 - [ ] T030 [P] [US1] Add map host component and Leaflet interop wrapper in src/VentouxTina.Web/Components/Pages/MapProgressSection.razor and src/VentouxTina.Web/wwwroot/js/map.js
 - [ ] T031 [US1] Render full route and traveled segment in map component in src/VentouxTina.Web/Components/Pages/MapProgressSection.razor
@@ -151,11 +157,13 @@
 **Purpose**: Final hardening, compliance, and release readiness across stories.
 
 - [ ] T058 [P] Add OpenAPI alignment checks with implemented endpoints in specs/001-trip-progress-webapp/contracts/public-api.yaml and src/VentouxTina.Tests.Integration/Api/ContractAlignmentTests.cs
-- [ ] T059 [P] Add DB seeding script for local manual-entry baseline in src/VentouxTina.Web/Infrastructure/DataSources/Seed/seed.sql
+- [ ] T059 [P] Add one-time PowerShell route seeding script for TripRoute and checkpoints using a free route planner API in src/scripts/seed-route.ps1
+- [ ] T059a [P] Add generated route payload artifact used by seed script in src/scripts/seed-data/route-checkpoints.json
 - [ ] T060 Verify docker-compose persistence behavior in src/docker-compose.yml and document results in specs/001-trip-progress-webapp/quickstart.md
 - [ ] T061 [P] Add container image validation task (chiseled base and non-root runtime) in src/VentouxTina.Web/Dockerfile and .github/workflows/ci.yml
 - [ ] T062 [P] Add throttling observability counters/log fields in src/VentouxTina.Web/Program.cs
-- [ ] T063 Run full quality gates (tests, csharpier, roslynator) and capture command sequence in specs/001-trip-progress-webapp/quickstart.md
+- [ ] T063 Add integration tests for startup provisioning and pending migration execution in src/VentouxTina.Tests.Integration/Infrastructure/StartupProvisioningTests.cs
+- [ ] T064 Run full quality gates (tests, csharpier, roslynator) and capture command sequence in specs/001-trip-progress-webapp/quickstart.md
 
 ---
 

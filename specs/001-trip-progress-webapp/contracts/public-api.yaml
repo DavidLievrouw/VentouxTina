@@ -26,7 +26,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TripProgressSnapshot'
+                $ref: '#/components/schemas/ProgressProjection'
         '429':
           description: Too many requests
           content:
@@ -74,7 +74,7 @@ paths:
 
 components:
   schemas:
-    TripProgressSnapshot:
+    ProgressProjection:
       type: object
       required:
         - asOfDate
