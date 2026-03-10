@@ -8,7 +8,7 @@ namespace VentouxTina.Web.Domain.Services;
 public interface IAuthService
 {
     /// <summary>
-    /// Verifies credentials. Returns true and signs in the user if valid.
+    ///     Verifies credentials. Returns true and signs in the user if valid.
     /// </summary>
     Task<bool> LoginAsync(HttpContext httpContext, string username, string password);
 
@@ -28,10 +28,14 @@ public class AuthService : IAuthService
     {
         var user = await _userRepository.FindByUsernameAsync(username);
         if (user is null)
+        {
             return false;
+        }
 
         if (!BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
+        {
             return false;
+        }
 
         var claims = new List<Claim>
         {

@@ -113,7 +113,7 @@ await StartupMigrationRunner.RunAsync(app.Services, startupLogger);
 // ── Middleware pipeline ───────────────────────────────────────────────────────
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error", createScopeForErrors: true);
+    app.UseExceptionHandler("/Error", true);
 }
 
 app.UseRateLimiter();

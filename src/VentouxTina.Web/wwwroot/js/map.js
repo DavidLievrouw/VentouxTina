@@ -12,7 +12,7 @@ window.ventouxMap = {
             _map = null;
         }
 
-        _map = L.map(elementId, { zoomControl: true });
+        _map = L.map(elementId, {zoomControl: true});
 
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
             maxZoom: 18,
@@ -41,7 +41,7 @@ window.ventouxMap = {
         // Fit to full route; fall back to progress if route not provided
         const fitTarget = _routeLayer || _progressLayer;
         if (fitTarget) {
-            _map.fitBounds(fitTarget.getBounds(), { padding: [20, 20] });
+            _map.fitBounds(fitTarget.getBounds(), {padding: [20, 20]});
         }
     },
 

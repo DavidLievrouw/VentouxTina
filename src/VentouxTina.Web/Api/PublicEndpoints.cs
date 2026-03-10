@@ -19,7 +19,7 @@ public static class PublicEndpoints
                 var projection = await progress.GetProjectionAsync(ct);
                 if (projection is null)
                 {
-                    return Results.Problem(detail: "Geen routedata beschikbaar.", statusCode: 503);
+                    return Results.Problem("Geen routedata beschikbaar.", statusCode: 503);
                 }
 
                 return Results.Ok(
@@ -69,10 +69,7 @@ public static class PublicEndpoints
                 var (context, goal) = await ctx.GetContextAsync(ct);
                 if (context is null || goal is null)
                 {
-                    return Results.Problem(
-                        detail: "Contextdata niet beschikbaar.",
-                        statusCode: 503
-                    );
+                    return Results.Problem("Contextdata niet beschikbaar.", statusCode: 503);
                 }
 
                 return Results.Ok(

@@ -1,12 +1,11 @@
 ﻿@page "/beheer/logboek"
-@attribute [Authorize]
 @using Microsoft.AspNetCore.Authorization
 @using VentouxTina.Web.Domain.Models
 @using VentouxTina.Web.Domain.Services
 @using VentouxTina.Web.Infrastructure.DataSources
+@attribute [Authorize]
 @inject ITripLogWriteService WriteService
 @inject IProgressService ProgressService
-@inject NavigationManager Nav
 
 <PageTitle>Activiteit toevoegen – Ventoux Tina</PageTitle>
 
@@ -40,10 +39,11 @@
                        type="datetime-local"
                        value="@_timestampLocalStr"
                        @onchange="OnTimestampChanged"
-                       required />
+                       required/>
                 @if (_minTimestamp is not null)
                 {
-                    <small class="field-hint">Moet na @_minTimestamp.Value.ToString("dd/MM/yyyy HH:mm") liggen (laatste activiteit).</small>
+                    <small class="field-hint">Moet na @_minTimestamp.Value.ToString("dd/MM/yyyy HH:mm") liggen (laatste
+                        activiteit).</small>
                 }
             </div>
 
@@ -65,7 +65,7 @@
                        min="0.1"
                        max="100"
                        @bind="_kilometers"
-                       required />
+                       required/>
             </div>
 
             <div class="form-actions">
@@ -79,7 +79,9 @@
 </section>
 
 @code {
+
     private DateTime _timestampLocal = DateTime.Now;
+
     // One-way string fed into the input's value attribute — only set on init/reset,
     // never overwritten on re-render, so Blazor won't clobber what the user typed.
     private string _timestampLocalStr = string.Empty;
@@ -174,5 +176,6 @@
             : DateTime.Now;
         _timestampLocalStr = _timestampLocal.ToString("yyyy-MM-ddTHH:mm");
     }
+
 }
 

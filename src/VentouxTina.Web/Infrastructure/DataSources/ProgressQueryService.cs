@@ -22,7 +22,9 @@ public class ProgressQueryService : IProgressDataSource
             .ConfigureAwait(false);
 
         if (route is null)
+        {
             return null;
+        }
 
         var entries = await db
             .TripLogEntries.AsNoTracking()

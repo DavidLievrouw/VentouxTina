@@ -1,5 +1,4 @@
 @using VentouxTina.Web.Domain.Models
-
 <div class="progress-indicator">
     <div class="progress-bar-wrapper" role="progressbar"
          aria-valuenow="@((int)Projection.ProgressPercent)"
@@ -31,14 +30,17 @@
 </div>
 
 @code {
-    [Parameter, EditorRequired]
-    public ProgressProjection Projection { get; set; } = default!;
+    [Parameter][EditorRequired] public ProgressProjection Projection { get; set; } = default!;
 
-    private static string StatusLabel(string status) => status switch
+    private static string StatusLabel(string status)
     {
-        "not-started" => "Nog niet gestart",
-        "in-progress" => "Onderweg",
-        "completed"   => "Voltooid",
-        _             => status,
-    };
+        return status switch
+        {
+            "not-started" => "Nog niet gestart",
+            "in-progress" => "Onderweg",
+            "completed" => "Voltooid",
+            _ => status,
+        };
+    }
+
 }

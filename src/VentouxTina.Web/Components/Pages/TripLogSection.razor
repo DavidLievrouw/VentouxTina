@@ -1,7 +1,7 @@
-@using VentouxTina.Web.Infrastructure.DataSources
 @using VentouxTina.Web.Domain.Models
-@using VentouxTina.Web.Domain.Validation
 @using VentouxTina.Web.Domain.Services
+@using VentouxTina.Web.Domain.Validation
+@using VentouxTina.Web.Infrastructure.DataSources
 @inject ITripLogDataSource LogService
 @inject IProgressService ProgressService
 
@@ -26,37 +26,38 @@
     {
         <table class="log-table" aria-label="Activiteitenlogboek">
             <thead>
-                <tr>
-                    <th scope="col">Datum &amp; tijd</th>
-                    <th scope="col">Activiteit</th>
-                    <th scope="col">Kilometers</th>
-                    <th scope="col" class="col-numeric">Totaal</th>
-                    <th scope="col" class="col-numeric">%</th>
-                </tr>
+            <tr>
+                <th scope="col">Datum &amp; tijd</th>
+                <th scope="col">Activiteit</th>
+                <th scope="col">Kilometers</th>
+                <th scope="col" class="col-numeric">Totaal</th>
+                <th scope="col" class="col-numeric">%</th>
+            </tr>
             </thead>
             <tbody>
-                @{decimal running = 0m;}
-                @foreach (var entry in _entries)
+            @{ var running = 0m; }
+            @foreach (var entry in _entries)
+            {
+                running += entry.Kilometers;
+                var pct = _totalKm > 0 ? Math.Min(running / _totalKm * 100m, 100m) : 0m;
+                var validation = TripLogValidator.Validate(entry);
+                <tr class="@(validation.IsValid ? "" : "row-invalid")"
+                    title="@(validation.IsValid ? "" : validation.Error)">
+                    <td>@entry.Timestamp.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@ActivityLabel(entry.Activity)</td>
+                    <td>@entry.Kilometers.ToString("F1") km</td>
+                    <td class="col-numeric">@running.ToString("F1") km</td>
+                    <td class="col-numeric">@pct.ToString("F1")%</td>
+                </tr>
+                @if (!validation.IsValid)
                 {
-                    running += entry.Kilometers;
-                    var pct = _totalKm > 0 ? Math.Min(running / _totalKm * 100m, 100m) : 0m;
-                    var validation = TripLogValidator.Validate(entry);
-                    <tr class="@(validation.IsValid ? "" : "row-invalid")" title="@(validation.IsValid ? "" : validation.Error)">
-                        <td>@entry.Timestamp.ToString("dd/MM/yyyy HH:mm")</td>
-                        <td>@ActivityLabel(entry.Activity)</td>
-                        <td>@entry.Kilometers.ToString("F1") km</td>
-                        <td class="col-numeric">@running.ToString("F1") km</td>
-                        <td class="col-numeric">@pct.ToString("F1")%</td>
+                    <tr class="row-validation-error">
+                        <td colspan="5" role="alert">
+                            <small>Gegevensvalidatiefout: @validation.Error</small>
+                        </td>
                     </tr>
-                    @if (!validation.IsValid)
-                    {
-                        <tr class="row-validation-error">
-                            <td colspan="5" role="alert">
-                                <small>Gegevensvalidatiefout: @validation.Error</small>
-                            </td>
-                        </tr>
-                    }
                 }
+            }
             </tbody>
         </table>
     }
@@ -88,11 +89,15 @@
         }
     }
 
-    private static string ActivityLabel(string activity) => activity switch
+    private static string ActivityLabel(string activity)
     {
-        "Running"  => "Lopen",
-        "Cycling"  => "Fietsen",
-        "Walking"  => "Wandelen",
-        _          => activity,
-    };
+        return activity switch
+        {
+            "Running" => "Lopen",
+            "Cycling" => "Fietsen",
+            "Walking" => "Wandelen",
+            _ => activity,
+        };
+    }
+
 }

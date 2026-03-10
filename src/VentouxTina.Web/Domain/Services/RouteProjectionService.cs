@@ -15,7 +15,9 @@ public static class RouteProjectionService
     public static IReadOnlyList<double[]> ParsePolyline(string polylineJson)
     {
         if (string.IsNullOrWhiteSpace(polylineJson))
+        {
             return Array.Empty<double[]>();
+        }
 
         try
         {

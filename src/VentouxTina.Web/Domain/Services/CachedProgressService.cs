@@ -26,15 +26,22 @@ public class CachedProgressService : IProgressService
     public async Task<ProgressProjection?> GetProjectionAsync(CancellationToken ct = default)
     {
         if (_cache.TryGetValue(CacheKey, out ProgressProjection? cached))
+        {
             return cached;
+        }
 
         var projection = await _dataSource.ComputeProjectionAsync(ct);
 
         if (projection is not null)
+        {
             _cache.Set(CacheKey, projection, CacheDuration);
+        }
 
         return projection;
     }
 
-    public void InvalidateCache() => _cache.Remove(CacheKey);
+    public void InvalidateCache()
+    {
+        _cache.Remove(CacheKey);
+    }
 }
