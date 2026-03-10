@@ -5,6 +5,12 @@
 **Status**: Draft  
 **Input**: User description: "Build a dotnet application, deliverable as a docker container, that hosts a single web page. The page consists of three parts: a trip progress map, static project context for Klimmen tegen MS, and a trip log sourced from a manually updated yaml or json file. UI language is Dutch (Belgium)."
 
+## Clarifications
+
+### Session 2026-03-10
+
+- Q: Welke projectcontext moet expliciet zichtbaar zijn voor bezoekers? → A: Het project is een liefdadigheidsactie/fondsenwerving voor "Klimmen tegen MS" met streefdoel 500 euro, en backers volgen Tina's voortgang via deze webapplicatie.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Voortgang op de kaart bekijken (Priority: P1)
@@ -28,7 +34,7 @@ de pagina te openen, en te verifiëren dat de volledige route zichtbaar is en he
 ### User Story 2 - Context van het initiatief lezen (Priority: P2)
 
 Als bezoeker wil ik een korte Nederlandstalige uitleg lezen over het project en de link met
-"Klimmen tegen MS", zodat ik het doel van de tocht begrijp.
+"Klimmen tegen MS", inclusief het fondsenwervingsdoel van 500 euro, zodat ik het doel van de tocht begrijp.
 
 **Why this priority**: Context verhoogt betrokkenheid en verklaart waarom de voortgang publiek wordt gedeeld.
 
@@ -37,8 +43,25 @@ te controleren dat de contexttekst in het Nederlands (Belgie) wordt getoond.
 
 **Acceptance Scenarios**:
 
-1. **Given** de pagina wordt geopend, **When** de contextsectie zichtbaar wordt, **Then** bevat de tekst een duidelijke verwijzing naar "Klimmen tegen MS" in het Nederlands (Belgie).
+1. **Given** de pagina wordt geopend, **When** de contextsectie zichtbaar wordt, **Then** bevat de tekst een duidelijke verwijzing naar "Klimmen tegen MS" als liefdadigheidsactie in het Nederlands (Belgie) met streefdoel van 500 euro.
 2. **Given** een mobiele of desktopweergave, **When** de gebruiker door de pagina navigeert, **Then** blijft de contexttekst leesbaar en correct gepositioneerd tussen kaart en log.
+
+---
+
+### User Story 4 - Als backer voortgang volgen (Priority: P2)
+
+Als backer wil ik Tina's voortgang op de webpagina kunnen volgen,
+zodat ik de evolutie van de fondsenwervingsactie in relatie tot de tocht kan meevolgen.
+
+**Why this priority**: Backers zijn een primaire doelgroep van de publieke pagina en bepalen de zichtbaarheid van de actie.
+
+**Independent Test**: Kan afzonderlijk getest worden door de pagina als anonieme bezoeker te openen en
+te verifiëren dat de contexttekst backers aanspreekt en dat voortgangsinformatie zonder login beschikbaar is.
+
+**Acceptance Scenarios**:
+
+1. **Given** een backer bezoekt de website, **When** de pagina geladen is, **Then** kan de backer zonder login de actuele routevoortgang en het logboek van Tina bekijken.
+2. **Given** de contextsectie wordt gelezen, **When** de backer de doelstelling bekijkt, **Then** is duidelijk dat het om een liefdadigheidsactie gaat met een doelbedrag van 500 euro.
 
 ---
 
@@ -76,6 +99,8 @@ te valideren dat de lijst en voortgangsberekening automatisch de bijgewerkte waa
 - **FR-005**: Het systeem MUST de afgelegde afstand bepalen op basis van de som van geldige logregels uit de gegevensbron.
 - **FR-006**: Het systeem MUST een voortgangsindicator in procent tonen op basis van afgelegde afstand versus totale routeafstand.
 - **FR-007**: De contextsectie MUST statische Nederlandstalige tekst (Belgie) bevatten die expliciet verwijst naar "Klimmen tegen MS".
+- **FR-007a**: De contextsectie MUST expliciet vermelden dat het project een liefdadigheidsactie/fondsenwerving is.
+- **FR-007b**: De contextsectie MUST het streefdoel van 500 euro expliciet tonen.
 - **FR-008**: Het logboek MUST per regel datum, kilometers en activiteit tonen.
 - **FR-009**: Toegestane activiteiten MUST minimaal lopen, fietsen en wandelen ondersteunen.
 - **FR-010**: Het systeem MUST loggegevens in json of yaml formaat kunnen inlezen uit een handmatig bijgewerkt bestand.
@@ -83,6 +108,7 @@ te valideren dat de lijst en voortgangsberekening automatisch de bijgewerkte waa
 - **FR-012**: Wijzigingen in het gegevensbestand MUST zichtbaar worden na herladen van de pagina, inclusief aangepaste kaartvoortgang en percentage.
 - **FR-013**: De logregels MUST in een consistente chronologische volgorde worden weergegeven.
 - **FR-014**: De applicatiebroncode en projectopbouw MUST binnen de bestaande submap `src` van de repository vallen.
+- **FR-015**: De webpagina MUST gericht zijn op publieke raadpleging door backers die Tina's voortgang willen volgen zonder authenticatie.
 
 ### Constitution Alignment *(mandatory)*
 
@@ -105,12 +131,14 @@ te valideren dat de lijst en voortgangsberekening automatisch de bijgewerkte waa
 - **TripLogEntry**: Een logregel met datum, afgelegde kilometers en activiteitstype.
 - **TripProgressSnapshot**: Afgeleide projectie van totale afgelegde afstand, resterende afstand en voortgangspercentage.
 - **ProjectContext**: Statische tekstinhoud die het doel van het initiatief en de relatie met "Klimmen tegen MS" beschrijft.
+- **FundraisingGoal**: Domeinwaarde met doelbedrag (500 euro) en beschrijving van de liefdadigheidscontext.
 
 ## Assumptions
 
 - De routeafstand is vooraf bepaald en beheerd als vaste referentiewaarde voor alle voortgangsberekeningen.
 - De beheerder werkt telkens slechts een bronbestand bij (json of yaml) voor de actieve omgeving.
 - De publieke pagina vereist geen gebruikersaanmelding.
+- Deze feature omvat geen online donatieverwerking; ze communiceert enkel de fondsenwervingscontext en doelstelling.
 - Activiteiten kunnen intern als gestandaardiseerde waarden worden opgeslagen, maar worden in de UI in het Nederlands getoond.
 
 ## Success Criteria *(mandatory)*
@@ -121,3 +149,4 @@ te valideren dat de lijst en voortgangsberekening automatisch de bijgewerkte waa
 - **SC-002**: In 100% van testgevallen met geldige logdata komt het getoonde voortgangspercentage overeen met de verwachte cumulatieve kilometerberekening.
 - **SC-003**: In gebruikerstests kan minstens 90% van de deelnemers binnen 10 seconden zowel de huidige voortgang als de meest recente logactiviteit identificeren.
 - **SC-004**: Na het toevoegen van een nieuwe geldige logregel en herladen van de pagina is de nieuwe regel in 100% van de gevallen zichtbaar en verwerkt in kaartvoortgang en percentage.
+- **SC-005**: In 100% van de gecontroleerde paginaweergaven is de vermelding van liefdadigheidsdoel en 500 euro streefbedrag zichtbaar in de contextsectie.
