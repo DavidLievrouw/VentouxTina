@@ -7,5 +7,6 @@ public record ProgressProjection(
     decimal RemainingDistanceKm,
     decimal ProgressPercent,
     string Status,
+    IReadOnlyList<double[]> FullPolyline,
     IReadOnlyList<double[]> TraveledPolyline
 );

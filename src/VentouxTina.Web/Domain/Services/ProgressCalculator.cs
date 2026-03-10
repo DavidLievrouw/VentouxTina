@@ -27,6 +27,7 @@ public static class ProgressCalculator
             RemainingDistanceKm: remainingKm,
             ProgressPercent: percent,
             Status: status,
+            FullPolyline: fullPolyline,
             TraveledPolyline: traveledPolyline
         );
     }

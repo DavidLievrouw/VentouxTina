@@ -35,12 +35,15 @@
     private ProgressProjection? _projection;
     private bool _loading = true;
     private bool _error;
+    private bool _mapPending;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
             _projection = await ProgressService.GetProjectionAsync();
+            if (_projection is not null)
+                _mapPending = true;
         }
         catch
         {
@@ -54,17 +57,14 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender && _projection is not null && !_error)
+        if (_mapPending && _projection is not null)
         {
-            var route = _projection.TraveledPolyline.Count > 0
-                ? _projection.TraveledPolyline
-                : Array.Empty<double[]>();
-
+            _mapPending = false;
             await JS.InvokeVoidAsync(
                 "ventouxMap.init",
                 "map",
-                Array.Empty<double[]>(), // full route polyline not stored in projection in this call; use traveled only for now
-                route
+                _projection.FullPolyline,
+                _projection.TraveledPolyline
             );
         }
     }
