@@ -1,0 +1,47 @@
+services:
+  web:
+    container_name: ventouxtina-web
+    image: ventouxtina-web:${APP_VERSION:-latest}
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__MariaDb: Server=mariadb;Port=3306;Database=ventouxtina;User=ventouxtina;Password=${MARIADB_PASSWORD:-ventouxtina_dev_pw};
+    networks:
+      - motorsports_network
+    depends_on:
+      mariadb:
+        condition: service_healthy
+
+  mariadb:
+    container_name: ventouxtina-mariadb
+    image: mariadb:12.2
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: ventouxtina
+      MARIADB_USER: ventouxtina
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD:-ventouxtina_dev_pw}
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:-ventouxtina_dev_root_pw}
+    volumes:
+      - /etc/dalion/ventouxtina/mariadb:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - mariadb-admin ping -h 127.0.0.1 -uroot -p$$MARIADB_ROOT_PASSWORD || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    networks:
+      - motorsports_network
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
+networks:
+  motorsports_network:
+    name: motorsports_net
+    external: true
