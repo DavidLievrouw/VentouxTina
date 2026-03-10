@@ -3,11 +3,13 @@
     <File Path="../.editorconfig" />
     <File Path="../.gitignore" />
     <File Path="backup.ps1" />
+    <File Path="build.ps1" />
     <File Path="Directory.Build.props" />
     <File Path="Directory.Build.targets" />
     <File Path="Directory.Packages.props" />
     <File Path="docker-compose.dev.yml" />
     <File Path="docker-compose.yml" />
+    <File Path="version.txt" />
   </Folder>
   <Project Path="VentouxTina.Web/VentouxTina.Web.csproj" />
 </Solution>

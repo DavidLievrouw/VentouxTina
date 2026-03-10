@@ -16,12 +16,18 @@
     </main>
 
     <footer class="site-footer">
-        <small>&copy; @DateTime.Now.Year &mdash; Created by David Lievrouw &mdash; ..and lots of AI assistants</small>
+        <small>&copy; @DateTime.Now.Year &mdash; Created by David Lievrouw &mdash; ..and lots of AI assistants &mdash; v@{@Version}</small>
     </footer>
 </div>
 
 @code {
     private bool _darkMode;
+    private static readonly string Version =
+        (System.Reflection.CustomAttributeExtensions
+            .GetCustomAttribute<System.Reflection.AssemblyInformationalVersionAttribute>(
+                typeof(MainLayout).Assembly)
+            ?.InformationalVersion ?? "?")
+        .Split('+')[0];
 
     private async Task ToggleDarkMode()
     {

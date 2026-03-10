@@ -4,6 +4,7 @@ WORKDIR /repo
 COPY src/Directory.Packages.props src/
 COPY src/Directory.Build.props src/
 COPY src/Directory.Build.targets src/
+COPY src/version.txt src/
 COPY src/VentouxTina.Web/VentouxTina.Web.csproj src/VentouxTina.Web/
 RUN dotnet restore src/VentouxTina.Web/VentouxTina.Web.csproj
 

@@ -1,6 +1,7 @@
 services:
   web:
     container_name: ventouxtina-web
+    image: ventouxtina-web:${APP_VERSION:-latest}
     build:
       context: ..
       dockerfile: src/VentouxTina.Web/Dockerfile

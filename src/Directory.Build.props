@@ -5,4 +5,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <VersionFilePath>$(MSBuildThisFileDirectory)version.txt</VersionFilePath>
+    <VersionFromFile>$([System.IO.File]::ReadAllText($(VersionFilePath)).Trim())</VersionFromFile>
+    <Version>$(VersionFromFile)</Version>
+    <AssemblyVersion>$(VersionFromFile)</AssemblyVersion>
+    <FileVersion>$(VersionFromFile)</FileVersion>
+    <InformationalVersion>$(VersionFromFile)</InformationalVersion>
+  </PropertyGroup>
 </Project>
