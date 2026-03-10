@@ -162,23 +162,36 @@ $polylineJson = ($payload.polyline | ConvertTo-Json -Compress -Depth 5) -replace
 $totalKm      = $payload.totalDistanceKm
 
 $sql = @"
-INSERT IGNORE INTO trip_routes (RouteId, StartName, EndName, TotalDistanceKm, PolylineJson)
-VALUES ('$($payload.routeId)', '$($payload.startName)', '$($payload.endName)', $totalKm, '$polylineJson');
+-- trip_routes: insert or update (idempotent via unique index on RouteId)
+INSERT INTO trip_routes (RouteId, StartName, EndName, TotalDistanceKm, PolylineJson)
+VALUES ('$($payload.routeId)', '$($payload.startName)', '$($payload.endName)', $totalKm, '$polylineJson')
+ON DUPLICATE KEY UPDATE
+    StartName       = VALUES(StartName),
+    EndName         = VALUES(EndName),
+    TotalDistanceKm = VALUES(TotalDistanceKm),
+    PolylineJson    = VALUES(PolylineJson);
 
 SET @route_id = (SELECT Id FROM trip_routes WHERE RouteId = '$($payload.routeId)');
+
+-- trip_checkpoints: delete existing for this route then re-insert (no unique business key)
+DELETE FROM trip_checkpoints WHERE TripRouteId = @route_id;
 
 "@
 
 foreach ($cp in $payload.checkpoints) {
-    $sql += "INSERT IGNORE INTO trip_checkpoints (TripRouteId, Name, CumulativeDistanceKm, Latitude, Longitude, OrderIndex) VALUES (@route_id, '$($cp.name)', $($cp.cumulativeDistanceKm), $($cp.lat), $($cp.lon), $($cp.orderIndex));`n"
+    $sql += "INSERT INTO trip_checkpoints (TripRouteId, Name, CumulativeDistanceKm, Latitude, Longitude, OrderIndex) VALUES (@route_id, '$($cp.name)', $($cp.cumulativeDistanceKm), $($cp.lat), $($cp.lon), $($cp.orderIndex));`n"
 }
 
 $sql += @"
 
-INSERT IGNORE INTO fundraising_goals (OrganizationName, GoalAmountEur, IsFundraiser, Audience)
+-- fundraising_goals: delete all and re-insert (single-row seed table, no unique business key)
+DELETE FROM fundraising_goals;
+INSERT INTO fundraising_goals (OrganizationName, GoalAmountEur, IsFundraiser, Audience)
 VALUES ('$($payload.fundraisingGoal.organizationName)', $($payload.fundraisingGoal.goalAmountEur), $([int]$payload.fundraisingGoal.isFundraiser), '$($payload.fundraisingGoal.audience)');
 
-INSERT IGNORE INTO project_contexts (Locale, Headline, BodyText, FundraisingGoalText)
+-- project_contexts: delete all and re-insert (single-row seed table, no unique business key)
+DELETE FROM project_contexts;
+INSERT INTO project_contexts (Locale, Headline, BodyText, FundraisingGoalText)
 VALUES ('$($payload.projectContext.locale)', '$($payload.projectContext.headline)', '$($payload.projectContext.bodyText)', '$($payload.projectContext.fundraisingGoalText)');
 "@
 
