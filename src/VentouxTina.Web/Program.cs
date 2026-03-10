@@ -14,7 +14,8 @@ builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
 // ── Database ─────────────────────────────────────────────────────────────────
-var connectionString = builder.Configuration.GetConnectionString("MariaDb")
+var connectionString =
+    builder.Configuration.GetConnectionString("MariaDb")
     ?? throw new InvalidOperationException("ConnectionStrings:MariaDb is not configured.");
 
 builder.Services.AddDbContext<VentouxTinaDbContext>(options =>
@@ -57,7 +58,11 @@ builder.Services.AddRateLimiter(options =>
     {
         context.HttpContext.Response.ContentType = "application/json";
         await context.HttpContext.Response.WriteAsJsonAsync(
-            new { code = "TOO_MANY_REQUESTS", message = "Te veel verzoeken. Probeer het later opnieuw." },
+            new
+            {
+                code = "TOO_MANY_REQUESTS",
+                message = "Te veel verzoeken. Probeer het later opnieuw.",
+            },
             ct
         );
     };
@@ -91,4 +96,3 @@ app.MapRazorComponents<App>();
 app.MapPublicEndpoints();
 
 app.Run();
-

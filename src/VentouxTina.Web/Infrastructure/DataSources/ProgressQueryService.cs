@@ -15,9 +15,7 @@ public class ProgressQueryService : IProgressDataSource
 
     public async Task<ProgressProjection?> ComputeProjectionAsync(CancellationToken ct = default)
     {
-        var route = await _db
-            .TripRoutes.AsNoTracking()
-            .FirstOrDefaultAsync(ct);
+        var route = await _db.TripRoutes.AsNoTracking().FirstOrDefaultAsync(ct);
 
         if (route is null)
             return null;

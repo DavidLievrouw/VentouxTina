@@ -106,7 +106,7 @@ function Build-SeedPayload {
             locale               = "nl-BE"
             headline             = "Tina fietst van Wachtebeke naar Mont Ventoux voor Klimmen tegen MS"
             bodyText             = "Volg de voortgang van Tina op haar tocht van Wachtebeke naar de top van de Mont Ventoux. Elke kilometer telt voor het goede doel 'Klimmen tegen MS'."
-            fundraisingGoalText  = "Steun Klimmen tegen MS – doelstelling EUR 500"
+            fundraisingGoalText  = "Steun Klimmen tegen MS - doelstelling EUR 500"
         }
     }
 }
@@ -150,7 +150,8 @@ if (-not $mysqlAvailable) {
 }
 
 # Parse connection string for mysql CLI
-$csMatch = [regex]::Match($ConnectionString, "Server=(?<s>[^;]+);Port=(?<p>[^;]+);Database=(?<d>[^;]+);User=(?<u>[^;]+);Password=(?<pw>[^;]+)")
+$csPattern = 'Server=(?<s>[^;]+);Port=(?<p>[^;]+);Database=(?<d>[^;]+);User=(?<u>[^;]+);Password=(?<pw>[^;]+)'
+$csMatch = [regex]::Match($ConnectionString, $csPattern)
 $server   = $csMatch.Groups["s"].Value
 $port     = $csMatch.Groups["p"].Value
 $database = $csMatch.Groups["d"].Value

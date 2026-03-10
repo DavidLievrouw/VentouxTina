@@ -18,10 +18,9 @@ public static class PublicEndpoints
             {
                 var projection = await progress.GetProjectionAsync(ct);
                 if (projection is null)
-                    return Results.Problem(
-                        detail: "Geen routedata beschikbaar.",
-                        statusCode: 503
-                    );
+                {
+                    return Results.Problem(detail: "Geen routedata beschikbaar.", statusCode: 503);
+                }
 
                 return Results.Ok(
                     new
@@ -40,16 +39,14 @@ public static class PublicEndpoints
         // GET /api/logs
         group.MapGet(
             "/logs",
-            async (
-                ITripLogDataSource logs,
-                [FromQuery] int? limit,
-                CancellationToken ct
-            ) =>
+            async (ITripLogDataSource logs, [FromQuery] int? limit, CancellationToken ct) =>
             {
                 if (limit.HasValue && (limit.Value < 1 || limit.Value > 1000))
+                {
                     return Results.BadRequest(
                         new ErrorResponse("INVALID_LIMIT", "Limit moet tussen 1 en 1000 zijn.")
                     );
+                }
 
                 var entries = await logs.GetEntriesAsync(limit, ct);
                 return Results.Ok(
@@ -72,10 +69,12 @@ public static class PublicEndpoints
             {
                 var (context, goal) = await ctx.GetContextAsync(ct);
                 if (context is null || goal is null)
+                {
                     return Results.Problem(
                         detail: "Contextdata niet beschikbaar.",
                         statusCode: 503
                     );
+                }
 
                 return Results.Ok(
                     new

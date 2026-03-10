@@ -16,6 +16,9 @@ public class TripRouteConfiguration : IEntityTypeConfiguration<TripRoute>
         builder.Property(e => e.EndName).IsRequired().HasMaxLength(200);
         builder.Property(e => e.TotalDistanceKm).IsRequired().HasPrecision(10, 3);
         builder.Property(e => e.PolylineJson).IsRequired().HasColumnType("longtext");
-        builder.HasMany(e => e.Checkpoints).WithOne(c => c.TripRoute).HasForeignKey(c => c.TripRouteId);
+        builder
+            .HasMany(e => e.Checkpoints)
+            .WithOne(c => c.TripRoute)
+            .HasForeignKey(c => c.TripRouteId);
     }
 }

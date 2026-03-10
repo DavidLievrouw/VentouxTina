@@ -27,7 +27,7 @@ public class TripLogQueryService : ITripLogDataSource
     {
         var query = _db.TripLogEntries.AsNoTracking().OrderBy(e => e.Timestamp);
 
-        if (limit.HasValue && limit.Value > 0)
+        if (limit > 0)
             return await query.Take(limit.Value).ToListAsync(ct);
 
         return await query.ToListAsync(ct);

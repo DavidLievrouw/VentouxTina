@@ -15,8 +15,7 @@ public static class ProgressCalculator
         var rawTraveled = logEntries.Sum(e => e.Kilometers);
         var traveledKm = Math.Min(rawTraveled, totalKm);
         var remainingKm = Math.Max(totalKm - traveledKm, 0m);
-        var percent =
-            totalKm > 0 ? Math.Round((traveledKm / totalKm) * 100m, 2) : 0m;
+        var percent = totalKm > 0 ? Math.Round((traveledKm / totalKm) * 100m, 2) : 0m;
 
         var status = DetermineStatus(traveledKm, totalKm);
         var traveledPolyline = SlicePolyline(fullPolyline, traveledKm, totalKm);

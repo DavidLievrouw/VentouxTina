@@ -23,13 +23,9 @@ public class ProjectContextQueryService : IProjectContextDataSource
         CancellationToken ct = default
     )
     {
-        var context = await _db
-            .ProjectContexts.AsNoTracking()
-            .FirstOrDefaultAsync(ct);
+        var context = await _db.ProjectContexts.AsNoTracking().FirstOrDefaultAsync(ct);
 
-        var goal = await _db
-            .FundraisingGoals.AsNoTracking()
-            .FirstOrDefaultAsync(ct);
+        var goal = await _db.FundraisingGoals.AsNoTracking().FirstOrDefaultAsync(ct);
 
         return (context, goal);
     }

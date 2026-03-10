@@ -23,10 +23,12 @@ public static class TripLogValidator
             return new ValidationResult(false, "Kilometers mag niet negatief zijn.");
 
         if (!ValidActivities.Contains(entry.Activity, StringComparer.OrdinalIgnoreCase))
+        {
             return new ValidationResult(
                 false,
                 $"Activiteit '{entry.Activity}' is ongeldig. Toegestaan: {string.Join(", ", ValidActivities)}."
             );
+        }
 
         return new ValidationResult(true, null);
     }
