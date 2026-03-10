@@ -1,0 +1,163 @@
+openapi: 3.0.3
+info:
+  title: VentouxTina Public Progress API
+  version: 1.0.0
+  description: Read-only API contract for trip progress page rendering.
+servers:
+  - url: /
+paths:
+  /api/progress:
+    get:
+      summary: Get current trip progress snapshot
+      operationId: getProgress
+      responses:
+        '200':
+          description: Current progress
+          headers:
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+            Retry-After:
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TripProgressSnapshot'
+        '429':
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/logs:
+    get:
+      summary: Get validated trip log entries
+      operationId: getLogs
+      parameters:
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 1000
+      responses:
+        '200':
+          description: Chronological log entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TripLogEntry'
+        '429':
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/context:
+    get:
+      summary: Get localized project and fundraiser context
+      operationId: getContext
+      responses:
+        '200':
+          description: Context payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectContext'
+
+components:
+  schemas:
+    TripProgressSnapshot:
+      type: object
+      required:
+        - asOfDate
+        - totalDistanceKm
+        - traveledDistanceKm
+        - remainingDistanceKm
+        - progressPercent
+        - status
+      properties:
+        asOfDate:
+          type: string
+          format: date-time
+        totalDistanceKm:
+          type: number
+          format: double
+          minimum: 0
+        traveledDistanceKm:
+          type: number
+          format: double
+          minimum: 0
+        remainingDistanceKm:
+          type: number
+          format: double
+          minimum: 0
+        progressPercent:
+          type: number
+          format: double
+          minimum: 0
+          maximum: 100
+        status:
+          type: string
+          enum: [not-started, in-progress, completed]
+    TripLogEntry:
+      type: object
+      required:
+        - entryId
+        - date
+        - kilometers
+        - activity
+      properties:
+        entryId:
+          type: string
+        date:
+          type: string
+          format: date
+        kilometers:
+          type: number
+          format: double
+          minimum: 0
+        activity:
+          type: string
+          enum: [running, cycling, walking]
+        isCorrection:
+          type: boolean
+          default: false
+    ProjectContext:
+      type: object
+      required:
+        - locale
+        - organizationName
+        - goalAmountEur
+        - fundraiserText
+      properties:
+        locale:
+          type: string
+          example: nl-BE
+        organizationName:
+          type: string
+          example: Klimmen tegen MS
+        goalAmountEur:
+          type: number
+          format: double
+          example: 500
+        fundraiserText:
+          type: string
+        audience:
+          type: string
+          example: backers
+    ErrorResponse:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+        message:
+          type: string

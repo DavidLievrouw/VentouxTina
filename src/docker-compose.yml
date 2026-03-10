@@ -1,0 +1,42 @@
+services:
+  web:
+    container_name: ventouxtina-web
+    build:
+      context: ..
+      dockerfile: src/VentouxTina.Web/Dockerfile
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__MariaDb: Server=mariadb;Port=3306;Database=ventouxtina;User=ventouxtina;Password=ventouxtina_dev_pw;
+    ports:
+      - "8080:8080"
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    restart: unless-stopped
+
+  mariadb:
+    container_name: ventouxtina-mariadb
+    image: mariadb:11.4
+    environment:
+      MARIADB_DATABASE: ventouxtina
+      MARIADB_USER: ventouxtina
+      MARIADB_PASSWORD: ventouxtina_dev_pw
+      MARIADB_ROOT_PASSWORD: root_dev_pw
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - mariadb-admin ping -h 127.0.0.1 -uroot -p$$MARIADB_ROOT_PASSWORD || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    restart: unless-stopped
+
+volumes:
+  mariadb_data:
+    name: ventouxtina_mariadb_data
