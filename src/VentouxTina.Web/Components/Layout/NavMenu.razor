@@ -1,8 +1,24 @@
 ﻿<nav class="navbar" role="navigation" aria-label="Hoofdnavigatie">
-    <ul id="nav-links" class="nav-links">
-        <li><a href="#kaart">Kaart</a></li>
-        <li><a href="#context">Initiatief</a></li>
-        <li><a href="#logboek">Logboek</a></li>
+    <button class="nav-hamburger"
+            aria-label="Menu openen/sluiten"
+            aria-expanded="@_menuOpen"
+            aria-controls="nav-links"
+            @onclick="ToggleMenu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <ul id="nav-links" class="nav-links @(_menuOpen ? "nav-links--open" : "")">
+        <li><NavLink href="/kaart" Match="NavLinkMatch.All" @onclick="CloseMenu">🗺️ Kaart</NavLink></li>
+        <li><NavLink href="/initiatief" @onclick="CloseMenu">💛 Initiatief</NavLink></li>
+        <li><NavLink href="/logboek" @onclick="CloseMenu">📋 Logboek</NavLink></li>
     </ul>
 </nav>
+
+@code {
+    private bool _menuOpen;
+
+    private void ToggleMenu() => _menuOpen = !_menuOpen;
+    private void CloseMenu() => _menuOpen = false;
+}
 

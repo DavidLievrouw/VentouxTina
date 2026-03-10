@@ -1,11 +1,10 @@
 ﻿@page "/"
+@inject NavigationManager Nav
 
-<PageTitle>Ventoux Tina – Klimmen tegen MS</PageTitle>
-
-<div class="home-page">
-
-    <MapProgressSection />
-    <FundraiserContextSection />
-    <TripLogSection />
-</div>
+@code {
+    protected override void OnInitialized()
+    {
+        Nav.NavigateTo("/kaart", replace: true);
+    }
+}
 
