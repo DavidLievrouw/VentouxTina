@@ -6,6 +6,7 @@ namespace VentouxTina.Web.Domain.Services;
 public interface IProgressService
 {
     Task<ProgressProjection?> GetProjectionAsync(CancellationToken ct = default);
+    void InvalidateCache();
 }
 
 public class CachedProgressService : IProgressService
@@ -34,4 +35,6 @@ public class CachedProgressService : IProgressService
 
         return projection;
     }
+
+    public void InvalidateCache() => _cache.Remove(CacheKey);
 }

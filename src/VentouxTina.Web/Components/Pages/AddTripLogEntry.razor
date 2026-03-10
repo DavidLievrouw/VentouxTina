@@ -2,8 +2,10 @@
 @attribute [Authorize]
 @using Microsoft.AspNetCore.Authorization
 @using VentouxTina.Web.Domain.Models
+@using VentouxTina.Web.Domain.Services
 @using VentouxTina.Web.Infrastructure.DataSources
 @inject ITripLogWriteService WriteService
+@inject IProgressService ProgressService
 @inject NavigationManager Nav
 
 <PageTitle>Activiteit toevoegen – Ventoux Tina</PageTitle>
@@ -130,6 +132,7 @@
             };
 
             await WriteService.AddEntryAsync(entry);
+            ProgressService.InvalidateCache();
             _saved = true;
         }
         catch (Exception ex)
