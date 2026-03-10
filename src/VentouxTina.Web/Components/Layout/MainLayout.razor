@@ -39,7 +39,8 @@
             if (stored is "True")
             {
                 _darkMode = true;
-                await JS.InvokeVoidAsync("setDarkMode", true);
+                // Dark mode class is already applied by app.js on DOMContentLoaded,
+                // so we only sync the toggle button state here.
                 StateHasChanged();
             }
         }
