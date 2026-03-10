@@ -37,7 +37,7 @@ reason about as entries grow.
 ### II. Canonical Trip Progress Model
 The system MUST treat the route from Wachtebeke (Belgium) to Mont Ventoux (France) as a canonical,
 ordered path with a single total distance baseline. Every log entry MUST include traveled kilometers,
-timestamp, and source metadata; cumulative progress MUST be monotonic unless a correction entry is
+timestamp; cumulative progress MUST be monotonic unless a correction entry is
 explicitly marked and auditable. The map view and log list MUST be generated from the same canonical
 dataset to prevent divergence.
 

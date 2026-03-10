@@ -111,15 +111,15 @@ components:
       type: object
       required:
         - entryId
-        - date
+        - timestamp
         - kilometers
         - activity
       properties:
         entryId:
           type: string
-        date:
+        timestamp:
           type: string
-          format: date
+          format: date-time
         kilometers:
           type: number
           format: double

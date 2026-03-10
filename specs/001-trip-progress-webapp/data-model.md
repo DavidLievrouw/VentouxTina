@@ -11,7 +11,7 @@
   - `polyline` (ordered coordinate list, required)
   - `checkpoints` (ordered list with cumulative distances)
 - Seed source:
-  - One-time PowerShell script fetches route geometry/checkpoints from a free route planner API.
+  - One-time PowerShell script fetches route geometry/checkpoints from OpenRouteService (free tier).
 - Relationships:
   - One `TripRoute` is used by many runtime progress projections.
 
@@ -20,13 +20,13 @@
 - Purpose: One manually curated activity line used for progress calculation.
 - Fields:
   - `entryId` (string, required, unique in source)
-  - `date` (date, required)
+  - `timestamp` (date-time, required)
   - `kilometers` (decimal, required, >= 0)
   - `activity` (enum, required: `running`, `cycling`, `walking`)
   - `sourceLine` (integer, optional for diagnostics)
   - `isCorrection` (boolean, optional, default false)
 - Validation rules:
-  - `date` must parse correctly and be within realistic bounds.
+  - `timestamp` must parse correctly and be within realistic bounds.
   - `kilometers` must be non-negative.
   - `activity` must match allowed values.
   - Duplicate `entryId` values are invalid.
@@ -50,6 +50,14 @@
   - `headline` (string, required)
   - `bodyText` (string, required)
   - `fundraisingGoalText` (string, required, includes EUR 500 mention)
+
+## Entity: SeedDefaults
+
+- Purpose: Initial defaults provisioned by one-time seed script before user stories.
+- Fields:
+  - `fundraisingGoalDefaults` (required)
+  - `projectContextDefaults` (required)
+  - `routePlannerProvider` (required, fixed: OpenRouteService)
 
 ## Read Model: ProgressProjection (Transient, Non-Persistent)
 
@@ -94,6 +102,6 @@
 - `schema-pending` -> `schema-ready`
   - Trigger: application startup provisions database and applies pending EF Core migrations
 - `route-not-seeded` -> `route-seeded`
-  - Trigger: one-time PowerShell route seed script writes `TripRoute` and checkpoints
+  - Trigger: one-time PowerShell route seed script writes `TripRoute`, checkpoints, `FundraisingGoal`, and `ProjectContext`
 - `projection-cache-miss` -> `projection-cache-hit`
   - Trigger: first projection computed and stored in-memory cache with 1-minute TTL

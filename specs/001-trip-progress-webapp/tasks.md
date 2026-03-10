@@ -1,6 +1,6 @@
 # Tasks: Ventoux Trip Progress Pagina
 
-**Input**: Design documents from `/specs/001-trip-progress-webapp/`
+**Input**: Design documents from /specs/001-trip-progress-webapp/
 **Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, data-model.md, contracts/, quickstart.md
 
 **Tests**: Test tasks are REQUIRED by constitution for behavior-changing work. Unit and integration tests are included for every user story.
@@ -32,26 +32,28 @@
 - [ ] T010 Create EF Core DbContext and base DB entities in src/VentouxTina.Web/Infrastructure/DataSources/VentouxTinaDbContext.cs
 - [ ] T011 Create EF Core entity mappings in src/VentouxTina.Web/Infrastructure/DataSources/Configurations/TripLogEntryConfiguration.cs and src/VentouxTina.Web/Infrastructure/DataSources/Configurations/ProjectContextConfiguration.cs
 - [ ] T012 Add initial MariaDB migration in src/VentouxTina.Web/Infrastructure/DataSources/Migrations/
-- [ ] T012a [P] Add startup database provisioning and conditional migration execution in src/VentouxTina.Web/Program.cs
-- [ ] T012b [P] Add startup migration logging/failure handling in src/VentouxTina.Web/Infrastructure/DataSources/StartupMigrationRunner.cs
-- [ ] T013 [P] Implement canonical route model and constants in src/VentouxTina.Web/Domain/Models/TripRoute.cs
-- [ ] T014 [P] Implement TripLogEntry, FundraisingGoal, and ProjectContext domain models in src/VentouxTina.Web/Domain/Models/
-- [ ] T014a [P] Implement TripCheckpoint domain model in src/VentouxTina.Web/Domain/Models/TripCheckpoint.cs
-- [ ] T015 Implement domain validation services for dates/kilometers/activity in src/VentouxTina.Web/Domain/Validation/TripLogValidator.cs
-- [ ] T016 Implement progress calculation functional core and transient ProgressProjection read model in src/VentouxTina.Web/Domain/Services/ProgressCalculator.cs and src/VentouxTina.Web/Domain/Models/ProgressProjection.cs
-- [ ] T016a [P] Add 1-minute in-memory cache policy for progress projection in src/VentouxTina.Web/Domain/Services/CachedProgressService.cs
-- [ ] T017 [P] Register EF Core, repositories, and domain services in src/VentouxTina.Web/Program.cs
-- [ ] T018 [P] Configure ASP.NET Core rate limiting policies and 429 handling in src/VentouxTina.Web/Program.cs
-- [ ] T019 [P] Configure request logging and correlation ID middleware in src/VentouxTina.Web/Program.cs
-- [ ] T020 [P] Configure localization defaults for nl-BE in src/VentouxTina.Web/Program.cs
-- [ ] T021 Add read-only API skeleton endpoints for progress/log/context in src/VentouxTina.Web/Api/PublicEndpoints.cs
-- [ ] T022 [P] Add shared error response contract types in src/VentouxTina.Web/Api/Contracts/ErrorResponse.cs
+- [ ] T013 [P] Add startup database provisioning and conditional migration execution in src/VentouxTina.Web/Program.cs
+- [ ] T014 [P] Add startup migration logging/failure handling in src/VentouxTina.Web/Infrastructure/DataSources/StartupMigrationRunner.cs
+- [ ] T015 [P] Implement canonical route model and constants in src/VentouxTina.Web/Domain/Models/TripRoute.cs
+- [ ] T016 [P] Implement TripLogEntry, FundraisingGoal, and ProjectContext domain models in src/VentouxTina.Web/Domain/Models/
+- [ ] T017 [P] Implement TripCheckpoint domain model in src/VentouxTina.Web/Domain/Models/TripCheckpoint.cs
+- [ ] T018 Implement domain validation services for timestamp/kilometers/activity in src/VentouxTina.Web/Domain/Validation/TripLogValidator.cs
+- [ ] T019 Implement progress calculation functional core and transient ProgressProjection read model in src/VentouxTina.Web/Domain/Services/ProgressCalculator.cs and src/VentouxTina.Web/Domain/Models/ProgressProjection.cs
+- [ ] T020 [P] Add 1-minute in-memory cache policy for progress projection in src/VentouxTina.Web/Domain/Services/CachedProgressService.cs
+- [ ] T021 [P] Register EF Core, repositories, and domain services in src/VentouxTina.Web/Program.cs
+- [ ] T022 [P] Configure ASP.NET Core rate limiting policies and 429 handling in src/VentouxTina.Web/Program.cs
+- [ ] T023 [P] Configure request logging and correlation ID middleware in src/VentouxTina.Web/Program.cs
+- [ ] T024 [P] Configure localization defaults for nl-BE in src/VentouxTina.Web/Program.cs
+- [ ] T025 Add read-only API skeleton endpoints for progress/log/context in src/VentouxTina.Web/Api/PublicEndpoints.cs
+- [ ] T026 [P] Add shared error response contract types in src/VentouxTina.Web/Api/Contracts/ErrorResponse.cs
+- [ ] T027 [P] Add one-time PowerShell route seeding script for TripRoute/checkpoints/FundraisingGoal/ProjectContext using OpenRouteService in src/scripts/seed-route.ps1
+- [ ] T028 [P] Add generated route payload artifact used by seed script in src/scripts/seed-data/route-checkpoints.json
 
-**Checkpoint**: Foundation ready. User stories can start.
+**Checkpoint**: Foundation and seeding prerequisites are complete. User stories can start.
 
 ---
 
-## Phase 3: User Story 1 - Voortgang op de kaart bekijken (Priority: P1) 🎯 MVP
+## Phase 3: User Story 1 - Voortgang op de kaart bekijken (Priority: P1) MVP
 
 **Goal**: Toon volledige route en afgelegd segment met correct percentage.
 
@@ -59,22 +61,22 @@
 
 ### Tests for User Story 1 (REQUIRED)
 
-- [ ] T023 [P] [US1] Add unit tests for progress calculation edge cases in src/VentouxTina.Tests.Unit/Domain/Services/ProgressCalculatorTests.cs
-- [ ] T024 [P] [US1] Add unit tests for route capping and status transitions in src/VentouxTina.Tests.Unit/Domain/Services/ProgressStatusTests.cs
-- [ ] T025 [P] [US1] Add API contract tests for GET /api/progress in src/VentouxTina.Tests.Integration/Api/GetProgressContractTests.cs
-- [ ] T026 [P] [US1] Add integration test for map progress payload consistency in src/VentouxTina.Tests.Integration/Api/MapProgressIntegrationTests.cs
-- [ ] T026a [P] [US1] Add integration test verifying rendered map line distance equals cumulative TripLogEntry kilometers (capped) in src/VentouxTina.Tests.Integration/UI/MapLineDistanceTests.cs
+- [ ] T029 [P] [US1] Add unit tests for progress calculation edge cases in src/VentouxTina.Tests.Unit/Domain/Services/ProgressCalculatorTests.cs
+- [ ] T030 [P] [US1] Add unit tests for route capping and status transitions in src/VentouxTina.Tests.Unit/Domain/Services/ProgressStatusTests.cs
+- [ ] T031 [P] [US1] Add API contract tests for GET /api/progress in src/VentouxTina.Tests.Integration/Api/GetProgressContractTests.cs
+- [ ] T032 [P] [US1] Add integration test for map progress payload consistency in src/VentouxTina.Tests.Integration/Api/MapProgressIntegrationTests.cs
+- [ ] T033 [P] [US1] Add integration test verifying rendered map line distance equals cumulative TripLogEntry kilometers (capped) in src/VentouxTina.Tests.Integration/UI/MapLineDistanceTests.cs
 
 ### Implementation for User Story 1
 
-- [ ] T027 [P] [US1] Implement route projection service for traveled polyline in src/VentouxTina.Web/Domain/Services/RouteProjectionService.cs
-- [ ] T028 [US1] Implement progress query service using EF Core + functional core in src/VentouxTina.Web/Infrastructure/DataSources/ProgressQueryService.cs
-- [ ] T028a [US1] Implement cache-aware progress query flow to avoid DB access on hot reads in src/VentouxTina.Web/Infrastructure/DataSources/ProgressQueryService.cs
-- [ ] T029 [US1] Implement GET /api/progress endpoint behavior in src/VentouxTina.Web/Api/PublicEndpoints.cs
-- [ ] T030 [P] [US1] Add map host component and Leaflet interop wrapper in src/VentouxTina.Web/Components/Pages/MapProgressSection.razor and src/VentouxTina.Web/wwwroot/js/map.js
-- [ ] T031 [US1] Render full route and traveled segment in map component in src/VentouxTina.Web/Components/Pages/MapProgressSection.razor
-- [ ] T032 [US1] Add percentage and completion status indicator in src/VentouxTina.Web/Components/Pages/ProgressIndicator.razor
-- [ ] T033 [US1] Integrate map + progress section on home page in src/VentouxTina.Web/Components/Pages/Home.razor
+- [ ] T034 [P] [US1] Implement route projection service for traveled polyline in src/VentouxTina.Web/Domain/Services/RouteProjectionService.cs
+- [ ] T035 [US1] Implement progress query service using EF Core and functional core in src/VentouxTina.Web/Infrastructure/DataSources/ProgressQueryService.cs
+- [ ] T036 [US1] Implement cache-aware progress query flow to avoid DB access on hot reads in src/VentouxTina.Web/Infrastructure/DataSources/ProgressQueryService.cs
+- [ ] T037 [US1] Implement GET /api/progress endpoint behavior in src/VentouxTina.Web/Api/PublicEndpoints.cs
+- [ ] T038 [P] [US1] Add map host component and Leaflet interop wrapper in src/VentouxTina.Web/Components/Pages/MapProgressSection.razor and src/VentouxTina.Web/wwwroot/js/map.js
+- [ ] T039 [US1] Render full route and traveled segment in map component in src/VentouxTina.Web/Components/Pages/MapProgressSection.razor
+- [ ] T040 [US1] Add percentage and completion status indicator in src/VentouxTina.Web/Components/Pages/ProgressIndicator.razor
+- [ ] T041 [US1] Integrate map and progress section on home page in src/VentouxTina.Web/Components/Pages/Home.razor
 
 **Checkpoint**: US1 fully functional and independently testable.
 
@@ -88,17 +90,17 @@
 
 ### Tests for User Story 2 (REQUIRED)
 
-- [ ] T034 [P] [US2] Add unit tests for context localization rules in src/VentouxTina.Tests.Unit/Domain/Services/ContextLocalizationTests.cs
-- [ ] T035 [P] [US2] Add API contract tests for GET /api/context in src/VentouxTina.Tests.Integration/Api/GetContextContractTests.cs
-- [ ] T036 [P] [US2] Add integration test for fundraiser context rendering in src/VentouxTina.Tests.Integration/UI/FundraiserContextRenderingTests.cs
+- [ ] T042 [P] [US2] Add unit tests for context localization rules in src/VentouxTina.Tests.Unit/Domain/Services/ContextLocalizationTests.cs
+- [ ] T043 [P] [US2] Add API contract tests for GET /api/context in src/VentouxTina.Tests.Integration/Api/GetContextContractTests.cs
+- [ ] T044 [P] [US2] Add integration test for fundraiser context rendering in src/VentouxTina.Tests.Integration/UI/FundraiserContextRenderingTests.cs
 
 ### Implementation for User Story 2
 
-- [ ] T037 [P] [US2] Implement context repository/query service in src/VentouxTina.Web/Infrastructure/DataSources/ProjectContextQueryService.cs
-- [ ] T038 [US2] Implement GET /api/context endpoint behavior in src/VentouxTina.Web/Api/PublicEndpoints.cs
-- [ ] T039 [US2] Build fundraiser context section component in src/VentouxTina.Web/Components/Pages/FundraiserContextSection.razor
-- [ ] T040 [US2] Ensure all visible static labels and section titles are Dutch in src/VentouxTina.Web/Components/Pages/Home.razor
-- [ ] T041 [US2] Add Dutch error and empty-state messages for context failures in src/VentouxTina.Web/Components/Pages/FundraiserContextSection.razor
+- [ ] T045 [P] [US2] Implement context repository/query service in src/VentouxTina.Web/Infrastructure/DataSources/ProjectContextQueryService.cs
+- [ ] T046 [US2] Implement GET /api/context endpoint behavior in src/VentouxTina.Web/Api/PublicEndpoints.cs
+- [ ] T047 [US2] Build fundraiser context section component in src/VentouxTina.Web/Components/Pages/FundraiserContextSection.razor
+- [ ] T048 [US2] Ensure all visible static labels and section titles are Dutch in src/VentouxTina.Web/Components/Pages/Home.razor
+- [ ] T049 [US2] Add Dutch error and empty-state messages for context failures in src/VentouxTina.Web/Components/Pages/FundraiserContextSection.razor
 
 **Checkpoint**: US1 and US2 both independently testable.
 
@@ -112,17 +114,17 @@
 
 ### Tests for User Story 4 (REQUIRED)
 
-- [ ] T042 [P] [US4] Add unit tests for navigation state helper logic in src/VentouxTina.Tests.Unit/UI/NavigationStateTests.cs
-- [ ] T043 [P] [US4] Add integration test for anonymous public access in src/VentouxTina.Tests.Integration/UI/PublicAccessTests.cs
-- [ ] T044 [P] [US4] Add integration test for hamburger navigation and anchors in src/VentouxTina.Tests.Integration/UI/HamburgerNavigationTests.cs
+- [ ] T050 [P] [US4] Add unit tests for navigation state helper logic in src/VentouxTina.Tests.Unit/UI/NavigationStateTests.cs
+- [ ] T051 [P] [US4] Add integration test for anonymous public access in src/VentouxTina.Tests.Integration/UI/PublicAccessTests.cs
+- [ ] T052 [P] [US4] Add integration test for hamburger navigation and anchors in src/VentouxTina.Tests.Integration/UI/HamburgerNavigationTests.cs
 
 ### Implementation for User Story 4
 
-- [ ] T045 [P] [US4] Build responsive layout shell with dark mode toggle in src/VentouxTina.Web/Components/Layout/MainLayout.razor and src/VentouxTina.Web/Components/Layout/MainLayout.razor.css
-- [ ] T046 [US4] Implement hamburger menu linking to kaart/context/log secties in src/VentouxTina.Web/Components/Layout/NavMenu.razor
-- [ ] T047 [US4] Make home sections anchor-addressable for navigation in src/VentouxTina.Web/Components/Pages/Home.razor
-- [ ] T048 [US4] Add mobile-first responsive styles for all sections in src/VentouxTina.Web/wwwroot/css/app.css
-- [ ] T049 [US4] Enforce Dutch UI copy for navigation controls and dark mode labels in src/VentouxTina.Web/Components/Layout/NavMenu.razor
+- [ ] T053 [P] [US4] Build responsive layout shell with dark mode toggle in src/VentouxTina.Web/Components/Layout/MainLayout.razor and src/VentouxTina.Web/Components/Layout/MainLayout.razor.css
+- [ ] T054 [US4] Implement hamburger menu linking to kaart/context/log secties in src/VentouxTina.Web/Components/Layout/NavMenu.razor
+- [ ] T055 [US4] Make home sections anchor-addressable for navigation in src/VentouxTina.Web/Components/Pages/Home.razor
+- [ ] T056 [US4] Add mobile-first responsive styles for all sections in src/VentouxTina.Web/wwwroot/css/app.css
+- [ ] T057 [US4] Enforce Dutch UI copy for navigation controls and dark mode labels in src/VentouxTina.Web/Components/Layout/NavMenu.razor
 
 **Checkpoint**: US4 independently testable by anonymous backers.
 
@@ -132,21 +134,21 @@
 
 **Goal**: Toon chronologisch logboek uit MariaDB met activity-validatie en robuuste foutafhandeling.
 
-**Independent Test**: Na manuele DB-insert is het logboek direct zichtbaar en klopt de impact op voortgang.
+**Independent Test**: Na manuele DB-insert is het logboek zichtbaar op reload of na cache-expiratie en klopt de impact op voortgang.
 
 ### Tests for User Story 3 (REQUIRED)
 
-- [ ] T050 [P] [US3] Add unit tests for TripLogEntry validation rules in src/VentouxTina.Tests.Unit/Domain/Validation/TripLogValidatorTests.cs
-- [ ] T051 [P] [US3] Add API contract tests for GET /api/logs in src/VentouxTina.Tests.Integration/Api/GetLogsContractTests.cs
-- [ ] T052 [P] [US3] Add integration test for DB insert to UI refresh flow in src/VentouxTina.Tests.Integration/UI/TripLogRefreshIntegrationTests.cs
+- [ ] T058 [P] [US3] Add unit tests for TripLogEntry validation rules in src/VentouxTina.Tests.Unit/Domain/Validation/TripLogValidatorTests.cs
+- [ ] T059 [P] [US3] Add API contract tests for GET /api/logs in src/VentouxTina.Tests.Integration/Api/GetLogsContractTests.cs
+- [ ] T060 [P] [US3] Add integration test for DB insert to UI refresh flow with cache expiration in src/VentouxTina.Tests.Integration/UI/TripLogRefreshIntegrationTests.cs
 
 ### Implementation for User Story 3
 
-- [ ] T053 [P] [US3] Implement trip log query service with chronological ordering in src/VentouxTina.Web/Infrastructure/DataSources/TripLogQueryService.cs
-- [ ] T054 [US3] Implement GET /api/logs endpoint behavior in src/VentouxTina.Web/Api/PublicEndpoints.cs
-- [ ] T055 [US3] Build log list component with date/km/activity columns in src/VentouxTina.Web/Components/Pages/TripLogSection.razor
-- [ ] T056 [US3] Add Dutch validation and data-error messages in src/VentouxTina.Web/Components/Pages/TripLogSection.razor
-- [ ] T057 [US3] Wire log section into home page and recalculate progress on load in src/VentouxTina.Web/Components/Pages/Home.razor
+- [ ] T061 [P] [US3] Implement trip log query service with chronological ordering in src/VentouxTina.Web/Infrastructure/DataSources/TripLogQueryService.cs
+- [ ] T062 [US3] Implement GET /api/logs endpoint behavior in src/VentouxTina.Web/Api/PublicEndpoints.cs
+- [ ] T063 [US3] Build log list component with timestamp/km/activity columns in src/VentouxTina.Web/Components/Pages/TripLogSection.razor
+- [ ] T064 [US3] Add Dutch validation and data-error messages in src/VentouxTina.Web/Components/Pages/TripLogSection.razor
+- [ ] T065 [US3] Wire log section into home page and recalculate progress projection flow in src/VentouxTina.Web/Components/Pages/Home.razor
 
 **Checkpoint**: All user stories independently functional.
 
@@ -156,14 +158,12 @@
 
 **Purpose**: Final hardening, compliance, and release readiness across stories.
 
-- [ ] T058 [P] Add OpenAPI alignment checks with implemented endpoints in specs/001-trip-progress-webapp/contracts/public-api.yaml and src/VentouxTina.Tests.Integration/Api/ContractAlignmentTests.cs
-- [ ] T059 [P] Add one-time PowerShell route seeding script for TripRoute and checkpoints using a free route planner API in src/scripts/seed-route.ps1
-- [ ] T059a [P] Add generated route payload artifact used by seed script in src/scripts/seed-data/route-checkpoints.json
-- [ ] T060 Verify docker-compose persistence behavior in src/docker-compose.yml and document results in specs/001-trip-progress-webapp/quickstart.md
-- [ ] T061 [P] Add container image validation task (chiseled base and non-root runtime) in src/VentouxTina.Web/Dockerfile and .github/workflows/ci.yml
-- [ ] T062 [P] Add throttling observability counters/log fields in src/VentouxTina.Web/Program.cs
-- [ ] T063 Add integration tests for startup provisioning and pending migration execution in src/VentouxTina.Tests.Integration/Infrastructure/StartupProvisioningTests.cs
-- [ ] T064 Run full quality gates (tests, csharpier, roslynator) and capture command sequence in specs/001-trip-progress-webapp/quickstart.md
+- [ ] T066 [P] Add OpenAPI alignment checks with implemented endpoints in specs/001-trip-progress-webapp/contracts/public-api.yaml and src/VentouxTina.Tests.Integration/Api/ContractAlignmentTests.cs
+- [ ] T067 Verify docker-compose persistence behavior in src/docker-compose.yml and document results in specs/001-trip-progress-webapp/quickstart.md
+- [ ] T068 [P] Add container image validation task (chiseled base and non-root runtime) in src/VentouxTina.Web/Dockerfile and .github/workflows/ci.yml
+- [ ] T069 [P] Add throttling observability counters/log fields in src/VentouxTina.Web/Program.cs
+- [ ] T070 Add integration tests for startup provisioning and pending migration execution in src/VentouxTina.Tests.Integration/Infrastructure/StartupProvisioningTests.cs
+- [ ] T071 Run full quality gates (tests, csharpier, roslynator) and capture command sequence in specs/001-trip-progress-webapp/quickstart.md
 
 ---
 
@@ -171,20 +171,20 @@
 
 ### Phase Dependencies
 
-- **Phase 1 (Setup)**: No dependencies.
-- **Phase 2 (Foundational)**: Depends on Phase 1 and blocks all user stories.
-- **Phase 3 (US1)**: Depends on Phase 2.
-- **Phase 4 (US2)**: Depends on Phase 2.
-- **Phase 5 (US4)**: Depends on Phase 2, and integrates sections delivered by US1 and US2.
-- **Phase 6 (US3)**: Depends on Phase 2.
-- **Phase 7 (Polish)**: Depends on completion of all targeted user stories.
+- Phase 1 (Setup): No dependencies.
+- Phase 2 (Foundational): Depends on Phase 1 and blocks all user stories.
+- Phase 3 (US1): Depends on Phase 2.
+- Phase 4 (US2): Depends on Phase 2.
+- Phase 5 (US4): Depends on Phase 2, and integrates sections delivered by US1 and US2.
+- Phase 6 (US3): Depends on Phase 2.
+- Phase 7 (Polish): Depends on completion of all targeted user stories.
 
 ### User Story Dependencies
 
-- **US1 (P1)**: Independent after foundational completion.
-- **US2 (P2)**: Independent after foundational completion.
-- **US4 (P2)**: Independent for public-access/navigation behavior but integrates US1/US2 sections.
-- **US3 (P3)**: Independent after foundational completion.
+- US1 (P1): Independent after foundational completion.
+- US2 (P2): Independent after foundational completion.
+- US4 (P2): Independent for public-access/navigation behavior but integrates US1 and US2 sections.
+- US3 (P3): Independent after foundational completion.
 
 ### Within Each User Story
 
@@ -196,7 +196,7 @@
 ### Parallel Opportunities
 
 - Setup tasks marked [P] can run together (T004, T005, T006, T007, T008, T009).
-- Foundational tasks marked [P] can run together (T013, T014, T017, T018, T019, T020).
+- Foundational tasks marked [P] can run together (T013, T014, T015, T016, T017, T020, T021, T022, T023, T024, T026, T027, T028).
 - In each story, [P]-marked test tasks can run in parallel.
 - In each story, [P]-marked model/component tasks can run in parallel where files differ.
 
@@ -205,41 +205,16 @@
 ## Parallel Example: User Story 1
 
 ```bash
-Task: "T023 [US1] Unit tests for progress calculation edge cases in src/VentouxTina.Tests.Unit/Domain/Services/ProgressCalculatorTests.cs"
-Task: "T024 [US1] Unit tests for route capping and status transitions in src/VentouxTina.Tests.Unit/Domain/Services/ProgressStatusTests.cs"
-Task: "T025 [US1] Contract tests for GET /api/progress in src/VentouxTina.Tests.Integration/Api/GetProgressContractTests.cs"
+Task: T029 [US1] Unit tests for progress calculation edge cases
+Task: T030 [US1] Unit tests for route capping and status transitions
+Task: T031 [US1] Contract tests for GET /api/progress
+Task: T033 [US1] UI line-distance verification test
 ```
 
 ```bash
-Task: "T027 [US1] Implement route projection service in src/VentouxTina.Web/Domain/Services/RouteProjectionService.cs"
-Task: "T030 [US1] Add map host component and Leaflet interop in src/VentouxTina.Web/Components/Pages/MapProgressSection.razor and src/VentouxTina.Web/wwwroot/js/map.js"
+Task: T034 [US1] Implement route projection service
+Task: T038 [US1] Add map host component and Leaflet interop
 ```
-
-## Parallel Example: User Story 2
-
-```bash
-Task: "T034 [US2] Unit tests for context localization in src/VentouxTina.Tests.Unit/Domain/Services/ContextLocalizationTests.cs"
-Task: "T035 [US2] Contract tests for GET /api/context in src/VentouxTina.Tests.Integration/Api/GetContextContractTests.cs"
-Task: "T036 [US2] Integration test for fundraiser context rendering in src/VentouxTina.Tests.Integration/UI/FundraiserContextRenderingTests.cs"
-```
-
-## Parallel Example: User Story 4
-
-```bash
-Task: "T042 [US4] Unit tests for navigation state helper logic in src/VentouxTina.Tests.Unit/UI/NavigationStateTests.cs"
-Task: "T043 [US4] Integration test for anonymous public access in src/VentouxTina.Tests.Integration/UI/PublicAccessTests.cs"
-Task: "T044 [US4] Integration test for hamburger navigation in src/VentouxTina.Tests.Integration/UI/HamburgerNavigationTests.cs"
-```
-
-## Parallel Example: User Story 3
-
-```bash
-Task: "T050 [US3] Unit tests for TripLogEntry validation in src/VentouxTina.Tests.Unit/Domain/Validation/TripLogValidatorTests.cs"
-Task: "T051 [US3] Contract tests for GET /api/logs in src/VentouxTina.Tests.Integration/Api/GetLogsContractTests.cs"
-Task: "T052 [US3] Integration test for DB insert to UI refresh in src/VentouxTina.Tests.Integration/UI/TripLogRefreshIntegrationTests.cs"
-```
-
----
 
 ## Implementation Strategy
 
@@ -252,7 +227,7 @@ Task: "T052 [US3] Integration test for DB insert to UI refresh in src/VentouxTin
 
 ### Incremental Delivery
 
-1. Build foundation once (Phase 1-2).
+1. Build foundation once (Phase 1 and Phase 2).
 2. Deliver US1 (map progress).
 3. Deliver US2 (fundraiser context and Dutch copy baseline).
 4. Deliver US4 (public backer navigation and mobile UX).
@@ -261,7 +236,7 @@ Task: "T052 [US3] Integration test for DB insert to UI refresh in src/VentouxTin
 
 ### Parallel Team Strategy
 
-1. Team aligns on Phase 1-2 together.
+1. Team aligns on Phase 1 and Phase 2 together.
 2. Then split by story:
    - Developer A: US1
    - Developer B: US2
@@ -275,5 +250,6 @@ Task: "T052 [US3] Integration test for DB insert to UI refresh in src/VentouxTin
 
 - [P] tasks are safe for parallel execution only when file overlap is absent.
 - Every user story includes explicit test tasks and independent validation criteria.
+- Seeding via OpenRouteService script is a prerequisite before any user story execution.
 - Docker compose persistence and throttling are treated as first-class requirements, not optional hardening.
 - Keep all visible UI copy in Dutch (Belgium) across components and error states.

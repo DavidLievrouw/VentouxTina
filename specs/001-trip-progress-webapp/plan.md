@@ -15,8 +15,8 @@ Technical approach: functional-core domain services, Entity Framework Core with 
 Leaflet/OpenStreetMap map rendering, responsive dark-mode UX with hamburger navigation, built-in
 ASP.NET Core rate limiting, and Docker delivery with chiseled runtime images plus local docker-compose orchestration.
 Database provisioning and conditional EF Core migrations run on startup; route/checkpoint seed data is
-loaded once via a PowerShell script using a free route planner API. Progress is projected in-memory and
-cached for 1 minute. The rendered map progress line is constrained to cumulative logged distance,
+loaded once via a PowerShell script using OpenRouteService (free tier). Progress is projected in-memory and
+cached for 1 minute, with freshness accepted after cache expiration. The rendered map progress line is constrained to cumulative logged distance,
 never beyond route end.
 
 ## Technical Context
@@ -29,12 +29,12 @@ never beyond route end.
 
 **Language/Version**: C# on .NET 10 (ASP.NET Core / Blazor Server rendering)
 **Primary Dependencies**: ASP.NET Core Blazor, Entity Framework Core, Pomelo.EntityFrameworkCore.MySql (MariaDB provider), Microsoft.Extensions.Caching.Memory, Leaflet JS + OpenStreetMap tiles, optional MudBlazor UI controls, ASP.NET Core Rate Limiting middleware
-**Storage**: MariaDB for trip logs, route/checkpoints, and context metadata; no persisted trip progress snapshot table
+**Storage**: MariaDB for trip logs (timestamp-based), route/checkpoints, and context metadata; no persisted trip progress snapshot table
 **Testing**: xUnit, Shouldly, FakeItEasy; bUnit for Razor component behavior where valuable
 **Target Platform**: Linux container hosting (public internet), desktop and mobile browsers
 **Project Type**: Web application (server-rendered UI + read-only API endpoints)
 **Performance Goals**: Primary page render under 2s p95; API responses under 200ms p95 for cached reads; progress read paths use 1-minute in-memory cache to reduce DB load
-**Constraints**: Must run from `src`; all visible UI copy in Dutch (Belgium); dark mode and mobile usability required; hosting cost control via throttling; map progress line must match cumulative logged km (capped at total route distance); formatting via CSharpier and Roslynator recommendations
+**Constraints**: Must run from `src`; all visible UI copy in Dutch (Belgium); dark mode, mobile hamburger navigation, and throttling are explicit functional requirements; map progress line must match cumulative logged km (capped at total route distance); formatting via CSharpier and Roslynator recommendations
 **Scale/Scope**: Public read-mostly traffic; single route, single-page experience, manually maintained activity log records in MariaDB, startup provisioning and migration execution, no authentication and no payment processing
 
 ## Constitution Check
