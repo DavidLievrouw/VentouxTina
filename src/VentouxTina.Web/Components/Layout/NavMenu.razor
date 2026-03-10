@@ -1,4 +1,6 @@
-﻿<nav class="navbar" role="navigation" aria-label="Hoofdnavigatie">
+﻿@using Microsoft.AspNetCore.Components.Authorization
+
+<nav class="navbar" role="navigation" aria-label="Hoofdnavigatie">
     <button class="nav-hamburger"
             aria-label="Menu openen/sluiten"
             aria-expanded="@_menuOpen"
@@ -12,6 +14,15 @@
         <li><NavLink href="/kaart" Match="NavLinkMatch.All" @onclick="CloseMenu">🗺️ Kaart</NavLink></li>
         <li><NavLink href="/initiatief" @onclick="CloseMenu">💛 Initiatief</NavLink></li>
         <li><NavLink href="/logboek" @onclick="CloseMenu">📋 Logboek</NavLink></li>
+        <AuthorizeView>
+            <Authorized>
+                <li><NavLink href="/beheer/logboek" @onclick="CloseMenu">➕ Toevoegen</NavLink></li>
+                <li><NavLink href="/logout" @onclick="CloseMenu">🔓 Uitloggen</NavLink></li>
+            </Authorized>
+            <NotAuthorized>
+                <li><NavLink href="/login" @onclick="CloseMenu">🔑 Inloggen</NavLink></li>
+            </NotAuthorized>
+        </AuthorizeView>
     </ul>
 </nav>
 

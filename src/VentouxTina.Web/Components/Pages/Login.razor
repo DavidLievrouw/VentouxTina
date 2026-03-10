@@ -1,0 +1,36 @@
+﻿@page "/login"
+
+<PageTitle>Inloggen – Ventoux Tina</PageTitle>
+
+<section class="section login-section">
+    <h2 class="section-title">Inloggen</h2>
+
+    @if (Error == "1")
+    {
+        <p class="error-message" role="alert">Ongeldige gebruikersnaam of wachtwoord.</p>
+    }
+
+    <form method="post" action="/account/login" class="login-form">
+        <input type="hidden" name="returnUrl" value="@ReturnUrl" />
+
+        <div class="form-field">
+            <label for="username">Gebruikersnaam</label>
+            <input id="username" name="username" type="text" autocomplete="username" required />
+        </div>
+        <div class="form-field">
+            <label for="password">Wachtwoord</label>
+            <input id="password" name="password" type="password" autocomplete="current-password" required />
+        </div>
+        <button type="submit" class="btn-primary">Inloggen</button>
+    </form>
+</section>
+
+@code {
+    [SupplyParameterFromQuery(Name = "returnUrl")]
+    private string? ReturnUrl { get; set; }
+
+    [SupplyParameterFromQuery(Name = "error")]
+    private string? Error { get; set; }
+}
+
+

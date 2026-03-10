@@ -14,6 +14,7 @@ public class VentouxTinaDbContext : DbContext
     public DbSet<TripCheckpoint> TripCheckpoints => Set<TripCheckpoint>();
     public DbSet<FundraisingGoal> FundraisingGoals => Set<FundraisingGoal>();
     public DbSet<ProjectContext> ProjectContexts => Set<ProjectContext>();
+    public DbSet<AppUser> AppUsers => Set<AppUser>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -22,5 +23,6 @@ public class VentouxTinaDbContext : DbContext
         modelBuilder.ApplyConfiguration(new TripRouteConfiguration());
         modelBuilder.ApplyConfiguration(new TripCheckpointConfiguration());
         modelBuilder.ApplyConfiguration(new FundraisingGoalConfiguration());
+        modelBuilder.ApplyConfiguration(new AppUserConfiguration());
     }
 }

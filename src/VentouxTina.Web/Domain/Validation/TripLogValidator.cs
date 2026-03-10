@@ -4,7 +4,7 @@ namespace VentouxTina.Web.Domain.Validation;
 
 public static class TripLogValidator
 {
-    private static readonly string[] ValidActivities = ["running", "cycling", "walking"];
+    private static readonly string[] ValidActivities = ["Running", "Cycling", "Walking"];
 
     public record ValidationResult(bool IsValid, string? Error);
 

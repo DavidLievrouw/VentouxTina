@@ -322,6 +322,121 @@ a { color: var(--color-brand); }
 }
 
 
+/* ── Forms (login & entry) ───────────────────────────────────────────────── */
+.login-section,
+.entry-form-section {
+    max-width: 480px;
+}
+
+.login-form,
+.entry-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.form-field label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.form-field input,
+.form-field select {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-size: 1rem;
+    transition: border-color 0.15s;
+}
+
+.form-field input:focus,
+.form-field select:focus {
+    outline: none;
+    border-color: var(--color-brand);
+    box-shadow: 0 0 0 3px var(--color-brand-light);
+}
+
+.field-hint {
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    margin-top: 0.15rem;
+}
+
+.form-errors {
+    list-style: none;
+    margin: 0;
+    padding: 0.75rem 1rem;
+    background: #fef2f2;
+    border: 1px solid var(--color-error);
+    border-radius: var(--radius);
+    color: var(--color-error);
+    font-size: 0.9rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+html.dark .form-errors {
+    background: #3b1212;
+}
+
+.form-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.btn-primary {
+    padding: 0.55rem 1.4rem;
+    background: var(--color-brand);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s;
+}
+
+.btn-primary:hover:not(:disabled) { opacity: 0.88; }
+.btn-primary:disabled { opacity: 0.55; cursor: not-allowed; }
+
+.btn-link {
+    background: none;
+    border: none;
+    color: var(--color-brand);
+    font-size: 0.95rem;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+}
+
+.success-message {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #f0fdf4;
+    border: 1px solid var(--color-success);
+    border-radius: var(--radius);
+    color: var(--color-success);
+    font-weight: 500;
+}
+
+html.dark .success-message {
+    background: #0f2a1a;
+}
+
 a, .btn-link {
     color: #006bb7;
 }
@@ -331,6 +446,7 @@ a, .btn-link {
     background-color: #1b6ec2;
     border-color: #1861ac;
 }
+
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;

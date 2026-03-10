@@ -1,4 +1,5 @@
 using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
@@ -44,6 +45,25 @@ builder.Services.AddScoped<IProgressDataSource, ProgressQueryService>();
 builder.Services.AddScoped<IProgressService, CachedProgressService>();
 builder.Services.AddScoped<IProjectContextDataSource, ProjectContextQueryService>();
 builder.Services.AddScoped<ITripLogDataSource, TripLogQueryService>();
+builder.Services.AddScoped<ITripLogWriteService, TripLogWriteService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+// ── Authentication (cookie-based) ────────────────────────────────────────────
+builder
+    .Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/login";
+        options.AccessDeniedPath = "/login";
+        options.ExpireTimeSpan = TimeSpan.FromDays(7);
+        options.SlidingExpiration = true;
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+    });
+builder.Services.AddAuthorization();
+builder.Services.AddCascadingAuthenticationState();
+builder.Services.AddHttpContextAccessor();
 
 // ── Rate limiting ─────────────────────────────────────────────────────────────
 var rateLimitSection = builder.Configuration.GetSection("RateLimit");
@@ -97,6 +117,8 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseRateLimiter();
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseAntiforgery();
 
 app.MapStaticAssets();
@@ -104,5 +126,6 @@ app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
 // ── API endpoints ─────────────────────────────────────────────────────────────
 app.MapPublicEndpoints();
+app.MapAccountEndpoints();
 
 app.Run();
