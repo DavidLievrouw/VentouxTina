@@ -1,0 +1,44 @@
+@using VentouxTina.Web.Domain.Models
+
+<div class="progress-indicator">
+    <div class="progress-bar-wrapper" role="progressbar"
+         aria-valuenow="@((int)Projection.ProgressPercent)"
+         aria-valuemin="0" aria-valuemax="100"
+         aria-label="Voortgang @((int)Projection.ProgressPercent)%">
+        <div class="progress-bar-fill" style="width: @(Projection.ProgressPercent)%"></div>
+    </div>
+
+    <div class="progress-stats">
+        <span class="stat">
+            <strong>@Projection.TraveledDistanceKm.ToString("F1") km</strong>
+            <small>afgelegd</small>
+        </span>
+        <span class="stat stat-percent">
+            <strong>@Projection.ProgressPercent.ToString("F1")%</strong>
+        </span>
+        <span class="stat">
+            <strong>@Projection.RemainingDistanceKm.ToString("F1") km</strong>
+            <small>resterend</small>
+        </span>
+    </div>
+
+    <p class="progress-status">
+        Status:
+        <span class="badge badge-@Projection.Status">
+            @StatusLabel(Projection.Status)
+        </span>
+    </p>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public ProgressProjection Projection { get; set; } = default!;
+
+    private static string StatusLabel(string status) => status switch
+    {
+        "not-started" => "Nog niet gestart",
+        "in-progress" => "Onderweg",
+        "completed"   => "Voltooid",
+        _             => status,
+    };
+}

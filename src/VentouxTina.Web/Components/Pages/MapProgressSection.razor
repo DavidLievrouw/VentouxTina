@@ -1,0 +1,71 @@
+@using VentouxTina.Web.Domain.Models
+@using VentouxTina.Web.Domain.Services
+@inject IProgressService ProgressService
+@inject IJSRuntime JS
+
+<section id="kaart" class="section map-section">
+    <h2 class="section-title">Route &amp; Voortgang</h2>
+
+    @if (_loading)
+    {
+        <div class="loading-placeholder" aria-busy="true" aria-label="Kaart laden...">
+            <span>Kaart laden&hellip;</span>
+        </div>
+    }
+    else if (_error)
+    {
+        <div class="error-message" role="alert">
+            <p>De kaart kon niet worden geladen. Probeer de pagina te vernieuwen.</p>
+        </div>
+    }
+    else if (_projection is null)
+    {
+        <div class="info-message">
+            <p>Nog geen routedata beschikbaar.</p>
+        </div>
+    }
+    else
+    {
+        <div id="map" class="leaflet-map" aria-label="Kaart van de route van Wachtebeke naar Mont Ventoux"></div>
+        <ProgressIndicator Projection="_projection" />
+    }
+</section>
+
+@code {
+    private ProgressProjection? _projection;
+    private bool _loading = true;
+    private bool _error;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _projection = await ProgressService.GetProjectionAsync();
+        }
+        catch
+        {
+            _error = true;
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && _projection is not null && !_error)
+        {
+            var route = _projection.TraveledPolyline.Count > 0
+                ? _projection.TraveledPolyline
+                : Array.Empty<double[]>();
+
+            await JS.InvokeVoidAsync(
+                "ventouxMap.init",
+                "map",
+                Array.Empty<double[]>(), // full route polyline not stored in projection in this call; use traveled only for now
+                route
+            );
+        }
+    }
+}

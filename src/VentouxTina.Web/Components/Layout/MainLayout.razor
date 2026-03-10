@@ -1,0 +1,44 @@
+﻿@inherits LayoutComponentBase
+@inject IJSRuntime JS
+
+<div class="page @(_darkMode ? "dark" : "")">
+    <header class="site-header">
+        <NavMenu />
+        <button class="dark-mode-toggle"
+                aria-label="@(_darkMode ? "Lichte modus" : "Donkere modus")"
+                @onclick="ToggleDarkMode">
+            @(_darkMode ? "☀️ Licht" : "🌙 Donker")
+        </button>
+    </header>
+
+    <main class="site-main">
+        @Body
+    </main>
+
+    <footer class="site-footer">
+        <small>&copy; @DateTime.Now.Year &mdash; Klimmen tegen MS &mdash; Ventoux Tina</small>
+    </footer>
+</div>
+
+@code {
+    private bool _darkMode;
+
+    private async Task ToggleDarkMode()
+    {
+        _darkMode = !_darkMode;
+        await JS.InvokeVoidAsync("localStorage.setItem", "darkMode", _darkMode.ToString());
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var stored = await JS.InvokeAsync<string?>("localStorage.getItem", "darkMode");
+            if (stored is "True")
+            {
+                _darkMode = true;
+                StateHasChanged();
+            }
+        }
+    }
+}

@@ -1,0 +1,34 @@
+# Development-only compose file: starts MariaDB only.
+# Use this when running the web app directly with `dotnet run` on WSL / Rancher Desktop.
+#
+# Usage:
+#   docker compose -f docker-compose.dev.yml up -d
+#   docker compose -f docker-compose.dev.yml down
+#   docker compose -f docker-compose.dev.yml down -v   # also removes the data volume
+
+services:
+  mariadb:
+    container_name: ventouxtina-mariadb-dev
+    image: mariadb:11.4
+    environment:
+      MARIADB_DATABASE: ventouxtina
+      MARIADB_USER: ventouxtina
+      MARIADB_PASSWORD: ventouxtina_dev_pw
+      MARIADB_ROOT_PASSWORD: root_dev_pw
+    ports:
+      - "127.0.0.1:3306:3306"
+    volumes:
+      - mariadb_dev_data:/var/lib/mysql
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - mariadb-admin ping -h 127.0.0.1 -uroot -p$$MARIADB_ROOT_PASSWORD || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    restart: unless-stopped
+
+volumes:
+  mariadb_dev_data:
+    name: ventouxtina_mariadb_dev_data

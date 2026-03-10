@@ -1,0 +1,86 @@
+@using VentouxTina.Web.Infrastructure.DataSources
+@using VentouxTina.Web.Domain.Models
+@using VentouxTina.Web.Domain.Validation
+@inject ITripLogDataSource LogService
+
+<section id="logboek" class="section log-section">
+    <h2 class="section-title">Activiteitenlogboek</h2>
+
+    @if (_loading)
+    {
+        <p class="loading-text" aria-busy="true">Logboek laden&hellip;</p>
+    }
+    else if (_error)
+    {
+        <p class="error-message" role="alert">
+            Het logboek kon niet worden geladen. Probeer de pagina te vernieuwen.
+        </p>
+    }
+    else if (!_entries.Any())
+    {
+        <p class="info-message">Nog geen activiteiten geregistreerd.</p>
+    }
+    else
+    {
+        <table class="log-table" aria-label="Activiteitenlogboek">
+            <thead>
+                <tr>
+                    <th scope="col">Datum &amp; tijd</th>
+                    <th scope="col">Activiteit</th>
+                    <th scope="col">Kilometers</th>
+                    <th scope="col">Correctie</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var entry in _entries)
+                {
+                    var validation = TripLogValidator.Validate(entry);
+                    <tr class="@(validation.IsValid ? "" : "row-invalid")" title="@(validation.IsValid ? "" : validation.Error)">
+                        <td>@entry.Timestamp.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@ActivityLabel(entry.Activity)</td>
+                        <td>@entry.Kilometers.ToString("F1") km</td>
+                        <td>@(entry.IsCorrection ? "Ja" : "–")</td>
+                    </tr>
+                    @if (!validation.IsValid)
+                    {
+                        <tr class="row-validation-error">
+                            <td colspan="4" role="alert">
+                                <small>Gegevensvalidatiefout: @validation.Error</small>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
+</section>
+
+@code {
+    private IReadOnlyList<TripLogEntry> _entries = Array.Empty<TripLogEntry>();
+    private bool _loading = true;
+    private bool _error;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _entries = await LogService.GetEntriesAsync();
+        }
+        catch
+        {
+            _error = true;
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private static string ActivityLabel(string activity) => activity switch
+    {
+        "running"  => "Lopen",
+        "cycling"  => "Fietsen",
+        "walking"  => "Wandelen",
+        _          => activity,
+    };
+}

@@ -11,13 +11,13 @@
 
 **Purpose**: Project initialization and baseline tooling.
 
-- [ ] T001 Create web project scaffolding in src/VentouxTina.Web/
-- [ ] T002 Add projects to solution in src/VentouxTina.slnx
-- [ ] T003 [P] Add .NET dependencies in src/VentouxTina.Web/VentouxTina.Web.csproj
-- [ ] T004 [P] Configure CSharpier and Roslynator in src/.config/dotnet-tools.json and src/Directory.Build.props
-- [ ] T005 [P] Add baseline app settings and connection placeholders in src/VentouxTina.Web/appsettings.json and src/VentouxTina.Web/appsettings.Development.json
-- [ ] T006 [P] Add multi-stage chiseled Dockerfile in src/VentouxTina.Web/Dockerfile
-- [ ] T007 [P] Validate and finalize local orchestration in src/docker-compose.yml
+- [X] T001 Create web project scaffolding in src/VentouxTina.Web/
+- [X] T002 Add projects to solution in src/VentouxTina.slnx
+- [X] T003 [P] Add .NET dependencies in src/VentouxTina.Web/VentouxTina.Web.csproj
+- [X] T004 [P] Configure CSharpier and Roslynator in src/.config/dotnet-tools.json and src/Directory.Build.props
+- [X] T005 [P] Add baseline app settings and connection placeholders in src/VentouxTina.Web/appsettings.json and src/VentouxTina.Web/appsettings.Development.json
+- [X] T006 [P] Add multi-stage chiseled Dockerfile in src/VentouxTina.Web/Dockerfile
+- [X] T007 [P] Validate and finalize local orchestration in src/docker-compose.yml
 
 ---
 
@@ -27,25 +27,25 @@
 
 **CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T008 Create EF Core DbContext and base DB entities in src/VentouxTina.Web/Infrastructure/DataSources/VentouxTinaDbContext.cs
-- [ ] T009 Create EF Core entity mappings in src/VentouxTina.Web/Infrastructure/DataSources/Configurations/TripLogEntryConfiguration.cs and src/VentouxTina.Web/Infrastructure/DataSources/Configurations/ProjectContextConfiguration.cs
-- [ ] T010 Add initial MariaDB migration in src/VentouxTina.Web/Infrastructure/DataSources/Migrations/
-- [ ] T011 [P] Add startup database provisioning and conditional migration execution in src/VentouxTina.Web/Program.cs
-- [ ] T012 [P] Add startup migration logging/failure handling in src/VentouxTina.Web/Infrastructure/DataSources/StartupMigrationRunner.cs
-- [ ] T013 [P] Implement canonical route model and constants in src/VentouxTina.Web/Domain/Models/TripRoute.cs
-- [ ] T014 [P] Implement TripLogEntry, FundraisingGoal, and ProjectContext domain models in src/VentouxTina.Web/Domain/Models/
-- [ ] T015 [P] Implement TripCheckpoint domain model in src/VentouxTina.Web/Domain/Models/TripCheckpoint.cs
-- [ ] T016 Implement domain validation services for timestamp/kilometers/activity in src/VentouxTina.Web/Domain/Validation/TripLogValidator.cs
-- [ ] T017 Implement progress calculation functional core and transient ProgressProjection read model in src/VentouxTina.Web/Domain/Services/ProgressCalculator.cs and src/VentouxTina.Web/Domain/Models/ProgressProjection.cs
-- [ ] T018 [P] Add 1-minute in-memory cache policy for progress projection in src/VentouxTina.Web/Domain/Services/CachedProgressService.cs
-- [ ] T019 [P] Register EF Core, repositories, and domain services in src/VentouxTina.Web/Program.cs
-- [ ] T020 [P] Configure ASP.NET Core rate limiting policies and 429 handling in src/VentouxTina.Web/Program.cs
-- [ ] T021 [P] Configure request logging and correlation ID middleware in src/VentouxTina.Web/Program.cs
-- [ ] T022 [P] Configure localization defaults for nl-BE in src/VentouxTina.Web/Program.cs
-- [ ] T023 Add read-only API skeleton endpoints for progress/log/context in src/VentouxTina.Web/Api/PublicEndpoints.cs
-- [ ] T024 [P] Add shared error response contract types in src/VentouxTina.Web/Api/Contracts/ErrorResponse.cs
-- [ ] T025 [P] Add one-time PowerShell route seeding script for TripRoute/checkpoints/FundraisingGoal/ProjectContext using OpenRouteService in src/scripts/seed-route.ps1
-- [ ] T026 [P] Add generated route payload artifact used by seed script in src/scripts/seed-data/route-checkpoints.json
+- [X] T008 Create EF Core DbContext and base DB entities in src/VentouxTina.Web/Infrastructure/DataSources/VentouxTinaDbContext.cs
+- [X] T009 Create EF Core entity mappings in src/VentouxTina.Web/Infrastructure/DataSources/Configurations/TripLogEntryConfiguration.cs and src/VentouxTina.Web/Infrastructure/DataSources/Configurations/ProjectContextConfiguration.cs
+- [X] T010 Add initial MariaDB migration in src/VentouxTina.Web/Infrastructure/DataSources/Migrations/
+- [X] T011 [P] Add startup database provisioning and conditional migration execution in src/VentouxTina.Web/Program.cs
+- [X] T012 [P] Add startup migration logging/failure handling in src/VentouxTina.Web/Infrastructure/DataSources/StartupMigrationRunner.cs
+- [X] T013 [P] Implement canonical route model and constants in src/VentouxTina.Web/Domain/Models/TripRoute.cs
+- [X] T014 [P] Implement TripLogEntry, FundraisingGoal, and ProjectContext domain models in src/VentouxTina.Web/Domain/Models/
+- [X] T015 [P] Implement TripCheckpoint domain model in src/VentouxTina.Web/Domain/Models/TripCheckpoint.cs
+- [X] T016 Implement domain validation services for timestamp/kilometers/activity in src/VentouxTina.Web/Domain/Validation/TripLogValidator.cs
+- [X] T017 Implement progress calculation functional core and transient ProgressProjection read model in src/VentouxTina.Web/Domain/Services/ProgressCalculator.cs and src/VentouxTina.Web/Domain/Models/ProgressProjection.cs
+- [X] T018 [P] Add 1-minute in-memory cache policy for progress projection in src/VentouxTina.Web/Domain/Services/CachedProgressService.cs
+- [X] T019 [P] Register EF Core, repositories, and domain services in src/VentouxTina.Web/Program.cs
+- [X] T020 [P] Configure ASP.NET Core rate limiting policies and 429 handling in src/VentouxTina.Web/Program.cs
+- [X] T021 [P] Configure request logging and correlation ID middleware in src/VentouxTina.Web/Program.cs
+- [X] T022 [P] Configure localization defaults for nl-BE in src/VentouxTina.Web/Program.cs
+- [X] T023 Add read-only API skeleton endpoints for progress/log/context in src/VentouxTina.Web/Api/PublicEndpoints.cs
+- [X] T024 [P] Add shared error response contract types in src/VentouxTina.Web/Api/Contracts/ErrorResponse.cs
+- [X] T025 [P] Add one-time PowerShell route seeding script for TripRoute/checkpoints/FundraisingGoal/ProjectContext using OpenRouteService in src/scripts/seed-route.ps1
+- [X] T026 [P] Add generated route payload artifact used by seed script in src/scripts/seed-data/route-checkpoints.json
 
 **Checkpoint**: Foundation and seeding prerequisites are complete. User stories can start.
 
@@ -67,14 +67,14 @@
 
 ### Implementation for User Story 1
 
-- [ ] T032 [P] [US1] Implement route projection service for traveled polyline in src/VentouxTina.Web/Domain/Services/RouteProjectionService.cs
-- [ ] T033 [US1] Implement progress query service using EF Core and functional core in src/VentouxTina.Web/Infrastructure/DataSources/ProgressQueryService.cs
-- [ ] T034 [US1] Implement cache-aware progress query flow to avoid DB access on hot reads in src/VentouxTina.Web/Infrastructure/DataSources/ProgressQueryService.cs
-- [ ] T035 [US1] Implement GET /api/progress endpoint behavior in src/VentouxTina.Web/Api/PublicEndpoints.cs
-- [ ] T036 [P] [US1] Add map host component and Leaflet interop wrapper in src/VentouxTina.Web/Components/Pages/MapProgressSection.razor and src/VentouxTina.Web/wwwroot/js/map.js
-- [ ] T037 [US1] Render full route and traveled segment in map component in src/VentouxTina.Web/Components/Pages/MapProgressSection.razor
-- [ ] T038 [US1] Add percentage and completion status indicator in src/VentouxTina.Web/Components/Pages/ProgressIndicator.razor
-- [ ] T039 [US1] Integrate map and progress section on home page in src/VentouxTina.Web/Components/Pages/Home.razor
+- [X] T032 [P] [US1] Implement route projection service for traveled polyline in src/VentouxTina.Web/Domain/Services/RouteProjectionService.cs
+- [X] T033 [US1] Implement progress query service using EF Core and functional core in src/VentouxTina.Web/Infrastructure/DataSources/ProgressQueryService.cs
+- [X] T034 [US1] Implement cache-aware progress query flow to avoid DB access on hot reads in src/VentouxTina.Web/Infrastructure/DataSources/ProgressQueryService.cs
+- [X] T035 [US1] Implement GET /api/progress endpoint behavior in src/VentouxTina.Web/Api/PublicEndpoints.cs
+- [X] T036 [P] [US1] Add map host component and Leaflet interop wrapper in src/VentouxTina.Web/Components/Pages/MapProgressSection.razor and src/VentouxTina.Web/wwwroot/js/map.js
+- [X] T037 [US1] Render full route and traveled segment in map component in src/VentouxTina.Web/Components/Pages/MapProgressSection.razor
+- [X] T038 [US1] Add percentage and completion status indicator in src/VentouxTina.Web/Components/Pages/ProgressIndicator.razor
+- [X] T039 [US1] Integrate map and progress section on home page in src/VentouxTina.Web/Components/Pages/Home.razor
 
 **Checkpoint**: US1 fully functional and independently testable.
 
@@ -94,11 +94,11 @@
 
 ### Implementation for User Story 2
 
-- [ ] T043 [P] [US2] Implement context repository/query service in src/VentouxTina.Web/Infrastructure/DataSources/ProjectContextQueryService.cs
-- [ ] T044 [US2] Implement GET /api/context endpoint behavior in src/VentouxTina.Web/Api/PublicEndpoints.cs
-- [ ] T045 [US2] Build fundraiser context section component in src/VentouxTina.Web/Components/Pages/FundraiserContextSection.razor
-- [ ] T046 [US2] Ensure all visible static labels and section titles are Dutch in src/VentouxTina.Web/Components/Pages/Home.razor
-- [ ] T047 [US2] Add Dutch error and empty-state messages for context failures in src/VentouxTina.Web/Components/Pages/FundraiserContextSection.razor
+- [X] T043 [P] [US2] Implement context repository/query service in src/VentouxTina.Web/Infrastructure/DataSources/ProjectContextQueryService.cs
+- [X] T044 [US2] Implement GET /api/context endpoint behavior in src/VentouxTina.Web/Api/PublicEndpoints.cs
+- [X] T045 [US2] Build fundraiser context section component in src/VentouxTina.Web/Components/Pages/FundraiserContextSection.razor
+- [X] T046 [US2] Ensure all visible static labels and section titles are Dutch in src/VentouxTina.Web/Components/Pages/Home.razor
+- [X] T047 [US2] Add Dutch error and empty-state messages for context failures in src/VentouxTina.Web/Components/Pages/FundraiserContextSection.razor
 
 **Checkpoint**: US1 and US2 both independently testable.
 
@@ -118,11 +118,11 @@
 
 ### Implementation for User Story 4
 
-- [ ] T051 [P] [US4] Build responsive layout shell with dark mode toggle in src/VentouxTina.Web/Components/Layout/MainLayout.razor and src/VentouxTina.Web/Components/Layout/MainLayout.razor.css
-- [ ] T052 [US4] Implement hamburger menu linking to kaart/context/log secties in src/VentouxTina.Web/Components/Layout/NavMenu.razor
-- [ ] T053 [US4] Make home sections anchor-addressable for navigation in src/VentouxTina.Web/Components/Pages/Home.razor
-- [ ] T054 [US4] Add mobile-first responsive styles for all sections in src/VentouxTina.Web/wwwroot/css/app.css
-- [ ] T055 [US4] Enforce Dutch UI copy for navigation controls and dark mode labels in src/VentouxTina.Web/Components/Layout/NavMenu.razor
+- [X] T051 [P] [US4] Build responsive layout shell with dark mode toggle in src/VentouxTina.Web/Components/Layout/MainLayout.razor and src/VentouxTina.Web/Components/Layout/MainLayout.razor.css
+- [X] T052 [US4] Implement hamburger menu linking to kaart/context/log secties in src/VentouxTina.Web/Components/Layout/NavMenu.razor
+- [X] T053 [US4] Make home sections anchor-addressable for navigation in src/VentouxTina.Web/Components/Pages/Home.razor
+- [X] T054 [US4] Add mobile-first responsive styles for all sections in src/VentouxTina.Web/wwwroot/css/app.css
+- [X] T055 [US4] Enforce Dutch UI copy for navigation controls and dark mode labels in src/VentouxTina.Web/Components/Layout/NavMenu.razor
 
 **Checkpoint**: US4 independently testable by anonymous backers.
 
@@ -142,11 +142,11 @@
 
 ### Implementation for User Story 3
 
-- [ ] T059 [P] [US3] Implement trip log query service with chronological ordering in src/VentouxTina.Web/Infrastructure/DataSources/TripLogQueryService.cs
-- [ ] T060 [US3] Implement GET /api/logs endpoint behavior in src/VentouxTina.Web/Api/PublicEndpoints.cs
-- [ ] T061 [US3] Build log list component with timestamp/km/activity columns in src/VentouxTina.Web/Components/Pages/TripLogSection.razor
-- [ ] T062 [US3] Add Dutch validation and data-error messages in src/VentouxTina.Web/Components/Pages/TripLogSection.razor
-- [ ] T063 [US3] Wire log section into home page and recalculate progress projection flow in src/VentouxTina.Web/Components/Pages/Home.razor
+- [X] T059 [P] [US3] Implement trip log query service with chronological ordering in src/VentouxTina.Web/Infrastructure/DataSources/TripLogQueryService.cs
+- [X] T060 [US3] Implement GET /api/logs endpoint behavior in src/VentouxTina.Web/Api/PublicEndpoints.cs
+- [X] T061 [US3] Build log list component with timestamp/km/activity columns in src/VentouxTina.Web/Components/Pages/TripLogSection.razor
+- [X] T062 [US3] Add Dutch validation and data-error messages in src/VentouxTina.Web/Components/Pages/TripLogSection.razor
+- [X] T063 [US3] Wire log section into home page and recalculate progress projection flow in src/VentouxTina.Web/Components/Pages/Home.razor
 
 **Checkpoint**: All user stories independently functional.
 

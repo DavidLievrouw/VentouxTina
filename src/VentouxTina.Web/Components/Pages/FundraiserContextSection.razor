@@ -1,0 +1,63 @@
+@using VentouxTina.Web.Infrastructure.DataSources
+@using VentouxTina.Web.Domain.Models
+@inject IProjectContextDataSource ContextService
+
+<section id="context" class="section context-section">
+    <h2 class="section-title">Over dit initiatief</h2>
+
+    @if (_loading)
+    {
+        <p class="loading-text" aria-busy="true">Inhoud laden&hellip;</p>
+    }
+    else if (_error)
+    {
+        <p class="error-message" role="alert">
+            De contextinformatie kon niet worden geladen. Probeer de pagina te vernieuwen.
+        </p>
+    }
+    else if (_context is null || _goal is null)
+    {
+        <p class="info-message">Geen contextinformatie beschikbaar.</p>
+    }
+    else
+    {
+        <article class="fundraiser-context">
+            <h3 class="fundraiser-headline">@_context.Headline</h3>
+            <p class="fundraiser-body">@_context.BodyText</p>
+
+            <div class="fundraiser-goal-badge">
+                <span class="goal-label">Organisatie:</span>
+                <span class="goal-value">@_goal.OrganizationName</span>
+            </div>
+            <div class="fundraiser-goal-badge">
+                <span class="goal-label">Doelbedrag:</span>
+                <span class="goal-value">EUR @_goal.GoalAmountEur.ToString("F0")</span>
+            </div>
+
+            <p class="fundraiser-goal-text">@_context.FundraisingGoalText</p>
+        </article>
+    }
+</section>
+
+@code {
+    private ProjectContext? _context;
+    private FundraisingGoal? _goal;
+    private bool _loading = true;
+    private bool _error;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            (_context, _goal) = await ContextService.GetContextAsync();
+        }
+        catch
+        {
+            _error = true;
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+}
