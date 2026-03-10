@@ -344,6 +344,12 @@ a {
     text-align: right;
 }
 
+.log-table .col-action {
+    width: 2.5rem;
+    text-align: center;
+    padding: 0.2rem;
+}
+
 .row-invalid td {
     color: var(--color-error);
 }
@@ -352,6 +358,35 @@ a {
     color: var(--color-error);
     font-size: 0.8rem;
     padding-top: 0;
+}
+
+.btn-delete {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: 1px solid var(--color-error);
+    color: var(--color-error);
+    cursor: pointer;
+    padding: 0.25rem 0.4rem;
+    border-radius: var(--radius);
+    transition: background 0.15s, color 0.15s;
+    line-height: 1;
+}
+.btn-delete:hover:not(:disabled) { background: var(--color-error); color: #fff; }
+.btn-delete:disabled { 
+    cursor: not-allowed; 
+    opacity: 0.35;
+    background: #fee2e2;
+}
+
+html.dark .btn-delete:hover:not(:disabled) {
+    background: #3b1212;
+}
+
+.btn-delete:disabled {
+    cursor: not-allowed;
+    opacity: 0.3;
 }
 
 /* ── Status messages ─────────────────────────────────────────────────────── */

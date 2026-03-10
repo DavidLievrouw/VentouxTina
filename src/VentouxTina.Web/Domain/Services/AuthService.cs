@@ -7,9 +7,6 @@ namespace VentouxTina.Web.Domain.Services;
 
 public interface IAuthService
 {
-    /// <summary>
-    ///     Verifies credentials. Returns true and signs in the user if valid.
-    /// </summary>
     Task<bool> LoginAsync(HttpContext httpContext, string username, string password);
 
     Task LogoutAsync(HttpContext httpContext);

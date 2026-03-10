@@ -47,10 +47,6 @@ public static class ProgressCalculator
         return "in-progress";
     }
 
-    /// <summary>
-    ///     Returns the subset of polyline coordinates corresponding to the traveled distance.
-    ///     The polyline is assumed to be uniformly spaced; coordinates are sliced proportionally.
-    /// </summary>
     private static IReadOnlyList<double[]> SlicePolyline(
         IReadOnlyList<double[]> polyline,
         decimal traveledKm,

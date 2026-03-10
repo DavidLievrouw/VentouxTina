@@ -17,3 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+window.scrollToBottom = function () {
+    window.scrollTo({top: document.body.scrollHeight, behavior: 'instant'});
+};
+

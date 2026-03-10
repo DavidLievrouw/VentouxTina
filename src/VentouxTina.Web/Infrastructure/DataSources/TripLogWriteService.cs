@@ -5,10 +5,11 @@ namespace VentouxTina.Web.Infrastructure.DataSources;
 
 public interface ITripLogWriteService
 {
-    /// <summary>Returns the timestamp of the most recent trip log entry, or null if none exist.</summary>
     Task<DateTime?> GetLatestTimestampAsync(CancellationToken ct = default);
 
     Task AddEntryAsync(TripLogEntry entry, CancellationToken ct = default);
+
+    Task<bool> DeleteEntryAsync(string entryId, CancellationToken ct = default);
 }
 
 public class TripLogWriteService : ITripLogWriteService
@@ -36,5 +37,21 @@ public class TripLogWriteService : ITripLogWriteService
         await using var db = _dbContextFactory();
         db.TripLogEntries.Add(entry);
         await db.SaveChangesAsync(ct).ConfigureAwait(false);
+    }
+
+    public async Task<bool> DeleteEntryAsync(string entryId, CancellationToken ct = default)
+    {
+        await using var db = _dbContextFactory();
+        var entry = await db
+            .TripLogEntries.FirstOrDefaultAsync(e => e.EntryId == entryId, ct)
+            .ConfigureAwait(false);
+        if (entry is null)
+        {
+            return false;
+        }
+
+        db.TripLogEntries.Remove(entry);
+        await db.SaveChangesAsync(ct).ConfigureAwait(false);
+        return true;
     }
 }

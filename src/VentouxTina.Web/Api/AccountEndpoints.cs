@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using VentouxTina.Web.Domain.Services;
+﻿using VentouxTina.Web.Domain.Services;
 
 namespace VentouxTina.Web.Api;
 
@@ -37,9 +35,9 @@ public static class AccountEndpoints
         // GET /account/logout — clears cookie, redirects home
         app.MapGet(
             "/account/logout",
-            async (HttpContext ctx) =>
+            async (HttpContext ctx, IAuthService authService) =>
             {
-                await ctx.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                await authService.LogoutAsync(ctx);
                 return Results.Redirect("/");
             }
         );
