@@ -6,26 +6,33 @@ namespace VentouxTina.Web.Infrastructure.DataSources;
 
 public class ProgressQueryService : IProgressDataSource
 {
-    private readonly VentouxTinaDbContext _db;
+    private readonly Func<VentouxTinaDbContext> _dbContextFactory;
 
-    public ProgressQueryService(VentouxTinaDbContext db)
+    public ProgressQueryService(Func<VentouxTinaDbContext> dbContextFactory)
     {
-        _db = db;
+        _dbContextFactory = dbContextFactory;
     }
 
     public async Task<ProgressProjection?> ComputeProjectionAsync(CancellationToken ct = default)
     {
-        var route = await _db.TripRoutes.AsNoTracking().FirstOrDefaultAsync(ct);
+        using (var db = _dbContextFactory())
+        {
+            var route = await db
+                .TripRoutes.AsNoTracking()
+                .FirstOrDefaultAsync(ct)
+                .ConfigureAwait(false);
 
-        if (route is null)
-            return null;
+            if (route is null)
+                return null;
 
-        var entries = await _db
-            .TripLogEntries.AsNoTracking()
-            .OrderBy(e => e.Timestamp)
-            .ToListAsync(ct);
+            var entries = await db
+                .TripLogEntries.AsNoTracking()
+                .OrderBy(e => e.Timestamp)
+                .ToListAsync(ct)
+                .ConfigureAwait(false);
 
-        var polyline = RouteProjectionService.ParsePolyline(route.PolylineJson);
-        return ProgressCalculator.Calculate(route, polyline, entries);
+            var polyline = RouteProjectionService.ParsePolyline(route.PolylineJson);
+            return ProgressCalculator.Calculate(route, polyline, entries);
+        }
     }
 }

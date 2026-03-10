@@ -18,13 +18,23 @@ var connectionString =
     builder.Configuration.GetConnectionString("MariaDb")
     ?? throw new InvalidOperationException("ConnectionStrings:MariaDb is not configured.");
 
-builder.Services.AddDbContext<VentouxTinaDbContext>(options =>
-    options.UseMySql(
-        connectionString,
-        new MariaDbServerVersion(new Version(11, 4, 0)),
-        mySql => mySql.SchemaBehavior(MySqlSchemaBehavior.Ignore)
-    )
-);
+// Register DbContext factory instead of scoped DbContext to prevent reuse issues
+builder.Services.AddTransient<Func<VentouxTinaDbContext>>(provider =>
+{
+    return () =>
+    {
+        var optionsBuilder = new DbContextOptionsBuilder<VentouxTinaDbContext>();
+        optionsBuilder
+            .UseMySql(
+                connectionString,
+                new MariaDbServerVersion(new Version(11, 4, 0)),
+                mySql => mySql.SchemaBehavior(MySqlSchemaBehavior.Ignore)
+            )
+            .EnableSensitiveDataLogging(builder.Environment.IsDevelopment());
+
+        return new VentouxTinaDbContext(optionsBuilder.Options);
+    };
+});
 
 // ── Memory cache (1-minute progress projection cache) ────────────────────────
 builder.Services.AddMemoryCache();

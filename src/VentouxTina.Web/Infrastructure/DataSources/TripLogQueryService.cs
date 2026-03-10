@@ -13,11 +13,11 @@ public interface ITripLogDataSource
 
 public class TripLogQueryService : ITripLogDataSource
 {
-    private readonly VentouxTinaDbContext _db;
+    private readonly Func<VentouxTinaDbContext> _dbContextFactory;
 
-    public TripLogQueryService(VentouxTinaDbContext db)
+    public TripLogQueryService(Func<VentouxTinaDbContext> dbContextFactory)
     {
-        _db = db;
+        _dbContextFactory = dbContextFactory;
     }
 
     public async Task<IReadOnlyList<TripLogEntry>> GetEntriesAsync(
@@ -25,11 +25,14 @@ public class TripLogQueryService : ITripLogDataSource
         CancellationToken ct = default
     )
     {
-        var query = _db.TripLogEntries.AsNoTracking().OrderBy(e => e.Timestamp);
+        using (var db = _dbContextFactory())
+        {
+            var query = db.TripLogEntries.AsNoTracking().OrderBy(e => e.Timestamp);
 
-        if (limit > 0)
-            return await query.Take(limit.Value).ToListAsync(ct);
+            if (limit > 0)
+                return await query.Take(limit.Value).ToListAsync(ct).ConfigureAwait(false);
 
-        return await query.ToListAsync(ct);
+            return await query.ToListAsync(ct).ConfigureAwait(false);
+        }
     }
 }

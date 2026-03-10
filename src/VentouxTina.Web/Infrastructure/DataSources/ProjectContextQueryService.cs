@@ -12,21 +12,30 @@ public interface IProjectContextDataSource
 
 public class ProjectContextQueryService : IProjectContextDataSource
 {
-    private readonly VentouxTinaDbContext _db;
+    private readonly Func<VentouxTinaDbContext> _dbContextFactory;
 
-    public ProjectContextQueryService(VentouxTinaDbContext db)
+    public ProjectContextQueryService(Func<VentouxTinaDbContext> dbContextFactory)
     {
-        _db = db;
+        _dbContextFactory = dbContextFactory;
     }
 
     public async Task<(ProjectContext? Context, FundraisingGoal? Goal)> GetContextAsync(
         CancellationToken ct = default
     )
     {
-        var context = await _db.ProjectContexts.AsNoTracking().FirstOrDefaultAsync(ct);
+        using (var db = _dbContextFactory())
+        {
+            var context = await db
+                .ProjectContexts.AsNoTracking()
+                .FirstOrDefaultAsync(ct)
+                .ConfigureAwait(false);
 
-        var goal = await _db.FundraisingGoals.AsNoTracking().FirstOrDefaultAsync(ct);
+            var goal = await db
+                .FundraisingGoals.AsNoTracking()
+                .FirstOrDefaultAsync(ct)
+                .ConfigureAwait(false);
 
-        return (context, goal);
+            return (context, goal);
+        }
     }
 }

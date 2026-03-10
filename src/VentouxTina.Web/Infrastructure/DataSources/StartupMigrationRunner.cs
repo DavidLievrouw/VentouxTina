@@ -6,8 +6,8 @@ public static class StartupMigrationRunner
 {
     public static async Task RunAsync(IServiceProvider services, ILogger logger)
     {
-        using var scope = services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<VentouxTinaDbContext>();
+        var dbContextFactory = services.GetRequiredService<Func<VentouxTinaDbContext>>();
+        using var db = dbContextFactory();
 
         try
         {

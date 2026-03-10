@@ -1,7 +1,7 @@
 ﻿@inherits LayoutComponentBase
 @inject IJSRuntime JS
 
-<div class="page @(_darkMode ? "dark" : "")">
+<div class="page">
     <header class="site-header">
         <NavMenu />
         <button class="dark-mode-toggle"
@@ -27,6 +27,8 @@
     {
         _darkMode = !_darkMode;
         await JS.InvokeVoidAsync("localStorage.setItem", "darkMode", _darkMode.ToString());
+        await JS.InvokeVoidAsync("setDarkMode", _darkMode);
+        StateHasChanged();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -37,6 +39,7 @@
             if (stored is "True")
             {
                 _darkMode = true;
+                await JS.InvokeVoidAsync("setDarkMode", true);
                 StateHasChanged();
             }
         }
