@@ -30,10 +30,10 @@ never beyond route end.
 **Language/Version**: C# on .NET 10 (ASP.NET Core / Blazor Server rendering)
 **Primary Dependencies**: ASP.NET Core Blazor, Entity Framework Core, Pomelo.EntityFrameworkCore.MySql (MariaDB provider), Microsoft.Extensions.Caching.Memory, Leaflet JS + OpenStreetMap tiles, optional MudBlazor UI controls, ASP.NET Core Rate Limiting middleware
 **Storage**: MariaDB for trip logs (timestamp-based), route/checkpoints, and context metadata; no persisted trip progress snapshot table
-**Testing**: xUnit, Shouldly, FakeItEasy; bUnit for Razor component behavior where valuable
+**Testing**: Manual validation in this PoC phase; automated test stack (xUnit, Shouldly, FakeItEasy, bUnit) deferred to next phase
 **Target Platform**: Linux container hosting (public internet), desktop and mobile browsers
 **Project Type**: Web application (server-rendered UI + read-only API endpoints)
-**Performance Goals**: Primary page render under 2s p95; API responses under 200ms p95 for cached reads; progress read paths use 1-minute in-memory cache to reduce DB load
+**Performance Goals**: Deferred for PoC phase; no hard p95 targets in this iteration
 **Constraints**: Must run from `src`; all visible UI copy in Dutch (Belgium); dark mode, mobile hamburger navigation, and throttling are explicit functional requirements; map progress line must match cumulative logged km (capped at total route distance); formatting via CSharpier and Roslynator recommendations
 **Scale/Scope**: Public read-mostly traffic; single route, single-page experience, manually maintained activity log records in MariaDB, startup provisioning and migration execution, no authentication and no payment processing
 
@@ -44,7 +44,8 @@ never beyond route end.
 - [x] Functional core boundary is explicit: business rules are pure functions, side effects isolated.
 - [x] Canonical trip model defined: single route baseline, monotonic cumulative progress rules,
       correction-entry strategy, and shared dataset for map + log views.
-- [x] Test-first plan documented: failing tests first, plus unit and integration coverage strategy.
+- [x] PoC manual validation evidence documented and linked.
+- [x] CI/test automation deferred per constitution PoC exception.
 - [x] Container-first delivery plan documented: Docker build, env/secrets strategy, immutable tagging.
 - [x] Modern standards confirmed: current stable language/runtime and maintained dependencies.
 
@@ -63,12 +64,6 @@ specs/001-trip-progress-webapp/
 ```
 
 ### Source Code (repository root)
-<!--
-  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
-  for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
-  not include Option labels.
--->
 
 ```text
 src/

@@ -86,6 +86,7 @@ Rationale: Modern standards improve security and maintainability while transpare
 - Code review requires at least one approval and explicit confirmation that constitution gates pass.
 - CI MUST execute linting, unit tests, integration tests, and container image build validation.
 - Releases MUST publish image tag, commit SHA, and high-level change summary.
+- When a PoC exception is used, CI MUST be marked as deferred with rationale, owner, and planned reintroduction milestone.
 
 ## Governance
 This constitution supersedes conflicting team conventions and template defaults.
