@@ -23,19 +23,17 @@ public class ProjectContextQueryService : IProjectContextDataSource
         CancellationToken ct = default
     )
     {
-        using (var db = _dbContextFactory())
-        {
-            var context = await db
-                .ProjectContexts.AsNoTracking()
-                .FirstOrDefaultAsync(ct)
-                .ConfigureAwait(false);
+        await using var db = _dbContextFactory();
+        var context = await db
+            .ProjectContexts.AsNoTracking()
+            .FirstOrDefaultAsync(ct)
+            .ConfigureAwait(false);
 
-            var goal = await db
-                .FundraisingGoals.AsNoTracking()
-                .FirstOrDefaultAsync(ct)
-                .ConfigureAwait(false);
+        var goal = await db
+            .FundraisingGoals.AsNoTracking()
+            .FirstOrDefaultAsync(ct)
+            .ConfigureAwait(false);
 
-            return (context, goal);
-        }
+        return (context, goal);
     }
 }

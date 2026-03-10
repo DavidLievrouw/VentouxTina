@@ -25,14 +25,12 @@ public class TripLogQueryService : ITripLogDataSource
         CancellationToken ct = default
     )
     {
-        using (var db = _dbContextFactory())
-        {
-            var query = db.TripLogEntries.AsNoTracking().OrderBy(e => e.Timestamp);
+        await using var db = _dbContextFactory();
+        var query = db.TripLogEntries.AsNoTracking().OrderBy(e => e.Timestamp);
 
-            if (limit > 0)
-                return await query.Take(limit.Value).ToListAsync(ct).ConfigureAwait(false);
+        if (limit > 0)
+            return await query.Take(limit.Value).ToListAsync(ct).ConfigureAwait(false);
 
-            return await query.ToListAsync(ct).ConfigureAwait(false);
-        }
+        return await query.ToListAsync(ct).ConfigureAwait(false);
     }
 }

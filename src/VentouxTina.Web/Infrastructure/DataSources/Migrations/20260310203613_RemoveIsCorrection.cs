@@ -10,9 +10,7 @@ namespace VentouxTina.Web.Infrastructure.DataSources.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "IsCorrection",
-                table: "trip_log_entries");
+            migrationBuilder.DropColumn(name: "IsCorrection", table: "trip_log_entries");
         }
 
         /// <inheritdoc />
@@ -23,7 +21,8 @@ namespace VentouxTina.Web.Infrastructure.DataSources.Migrations
                 table: "trip_log_entries",
                 type: "tinyint(1)",
                 nullable: false,
-                defaultValue: false);
+                defaultValue: false
+            );
         }
     }
 }

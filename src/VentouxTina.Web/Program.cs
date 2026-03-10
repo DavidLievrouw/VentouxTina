@@ -19,7 +19,7 @@ var connectionString =
     ?? throw new InvalidOperationException("ConnectionStrings:MariaDb is not configured.");
 
 // Register DbContext factory instead of scoped DbContext to prevent reuse issues
-builder.Services.AddTransient<Func<VentouxTinaDbContext>>(provider =>
+builder.Services.AddTransient<Func<VentouxTinaDbContext>>(_ =>
 {
     return () =>
     {

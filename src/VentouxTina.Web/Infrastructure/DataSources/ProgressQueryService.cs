@@ -15,24 +15,22 @@ public class ProgressQueryService : IProgressDataSource
 
     public async Task<ProgressProjection?> ComputeProjectionAsync(CancellationToken ct = default)
     {
-        using (var db = _dbContextFactory())
-        {
-            var route = await db
-                .TripRoutes.AsNoTracking()
-                .FirstOrDefaultAsync(ct)
-                .ConfigureAwait(false);
+        await using var db = _dbContextFactory();
+        var route = await db
+            .TripRoutes.AsNoTracking()
+            .FirstOrDefaultAsync(ct)
+            .ConfigureAwait(false);
 
-            if (route is null)
-                return null;
+        if (route is null)
+            return null;
 
-            var entries = await db
-                .TripLogEntries.AsNoTracking()
-                .OrderBy(e => e.Timestamp)
-                .ToListAsync(ct)
-                .ConfigureAwait(false);
+        var entries = await db
+            .TripLogEntries.AsNoTracking()
+            .OrderBy(e => e.Timestamp)
+            .ToListAsync(ct)
+            .ConfigureAwait(false);
 
-            var polyline = RouteProjectionService.ParsePolyline(route.PolylineJson);
-            return ProgressCalculator.Calculate(route, polyline, entries);
-        }
+        var polyline = RouteProjectionService.ParsePolyline(route.PolylineJson);
+        return ProgressCalculator.Calculate(route, polyline, entries);
     }
 }

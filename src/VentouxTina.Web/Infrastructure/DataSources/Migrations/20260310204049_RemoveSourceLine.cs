@@ -10,9 +10,7 @@ namespace VentouxTina.Web.Infrastructure.DataSources.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "SourceLine",
-                table: "trip_log_entries");
+            migrationBuilder.DropColumn(name: "SourceLine", table: "trip_log_entries");
         }
 
         /// <inheritdoc />
@@ -22,7 +20,8 @@ namespace VentouxTina.Web.Infrastructure.DataSources.Migrations
                 name: "SourceLine",
                 table: "trip_log_entries",
                 type: "int",
-                nullable: true);
+                nullable: true
+            );
         }
     }
 }
