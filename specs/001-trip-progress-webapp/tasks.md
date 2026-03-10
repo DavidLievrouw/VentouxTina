@@ -3,7 +3,7 @@
 **Input**: Design documents from /specs/001-trip-progress-webapp/
 **Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, data-model.md, contracts/, quickstart.md
 
-**Tests**: Test tasks are REQUIRED by constitution for behavior-changing work. Unit and integration tests are included for every user story.
+**Tests**: Geautomatiseerde tests zijn in deze proof-of-concept fase niet verplicht. Validatie gebeurt via handmatige story-validaties en smoke checks.
 
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
 
@@ -59,13 +59,13 @@
 
 **Independent Test**: Met seeded data in DB kan een bezoeker de route, afgelegd segment en percentage correct zien.
 
-### Tests for User Story 1 (REQUIRED)
+### Validation for User Story 1 (REQUIRED)
 
-- [ ] T029 [P] [US1] Add unit tests for progress calculation edge cases in src/VentouxTina.Tests.Unit/Domain/Services/ProgressCalculatorTests.cs
-- [ ] T030 [P] [US1] Add unit tests for route capping and status transitions in src/VentouxTina.Tests.Unit/Domain/Services/ProgressStatusTests.cs
-- [ ] T031 [P] [US1] Add API contract tests for GET /api/progress in src/VentouxTina.Tests.Integration/Api/GetProgressContractTests.cs
-- [ ] T032 [P] [US1] Add integration test for map progress payload consistency in src/VentouxTina.Tests.Integration/Api/MapProgressIntegrationTests.cs
-- [ ] T033 [P] [US1] Add integration test verifying rendered map line distance equals cumulative TripLogEntry kilometers (capped) in src/VentouxTina.Tests.Integration/UI/MapLineDistanceTests.cs
+- [ ] T029 [P] [US1] Perform manual validation of progress calculation edge cases and document outcomes in specs/001-trip-progress-webapp/quickstart.md
+- [ ] T030 [P] [US1] Perform manual validation of route capping and completion status transitions in specs/001-trip-progress-webapp/quickstart.md
+- [ ] T031 [P] [US1] Manually validate GET /api/progress response contract against specs/001-trip-progress-webapp/contracts/public-api.yaml
+- [ ] T032 [P] [US1] Manually validate map progress payload consistency via API output and rendered UI
+- [ ] T033 [P] [US1] Manually verify rendered map line distance equals cumulative TripLogEntry kilometers (capped)
 
 ### Implementation for User Story 1
 
@@ -88,11 +88,11 @@
 
 **Independent Test**: Een bezoeker ziet contexttekst in nl-BE met expliciete vermelding van Klimmen tegen MS en EUR 500.
 
-### Tests for User Story 2 (REQUIRED)
+### Validation for User Story 2 (REQUIRED)
 
-- [ ] T042 [P] [US2] Add unit tests for context localization rules in src/VentouxTina.Tests.Unit/Domain/Services/ContextLocalizationTests.cs
-- [ ] T043 [P] [US2] Add API contract tests for GET /api/context in src/VentouxTina.Tests.Integration/Api/GetContextContractTests.cs
-- [ ] T044 [P] [US2] Add integration test for fundraiser context rendering in src/VentouxTina.Tests.Integration/UI/FundraiserContextRenderingTests.cs
+- [ ] T042 [P] [US2] Perform manual validation of context localization rules and Dutch phrasing consistency
+- [ ] T043 [P] [US2] Manually validate GET /api/context response contract against specs/001-trip-progress-webapp/contracts/public-api.yaml
+- [ ] T044 [P] [US2] Perform manual UI validation of fundraiser context rendering on desktop and mobile
 
 ### Implementation for User Story 2
 
@@ -112,11 +112,11 @@
 
 **Independent Test**: Een anonieme bezoeker kan op mobiel en desktop via hamburgernavigatie alle secties bereiken.
 
-### Tests for User Story 4 (REQUIRED)
+### Validation for User Story 4 (REQUIRED)
 
-- [ ] T050 [P] [US4] Add unit tests for navigation state helper logic in src/VentouxTina.Tests.Unit/UI/NavigationStateTests.cs
-- [ ] T051 [P] [US4] Add integration test for anonymous public access in src/VentouxTina.Tests.Integration/UI/PublicAccessTests.cs
-- [ ] T052 [P] [US4] Add integration test for hamburger navigation and anchors in src/VentouxTina.Tests.Integration/UI/HamburgerNavigationTests.cs
+- [ ] T050 [P] [US4] Perform manual validation of navigation state transitions for desktop and mobile layouts
+- [ ] T051 [P] [US4] Manually verify anonymous public access to all sections without login
+- [ ] T052 [P] [US4] Manually verify hamburger navigation and section-anchor behavior on mobile
 
 ### Implementation for User Story 4
 
@@ -136,11 +136,11 @@
 
 **Independent Test**: Na manuele DB-insert is het logboek zichtbaar op reload of na cache-expiratie en klopt de impact op voortgang.
 
-### Tests for User Story 3 (REQUIRED)
+### Validation for User Story 3 (REQUIRED)
 
-- [ ] T058 [P] [US3] Add unit tests for TripLogEntry validation rules in src/VentouxTina.Tests.Unit/Domain/Validation/TripLogValidatorTests.cs
-- [ ] T059 [P] [US3] Add API contract tests for GET /api/logs in src/VentouxTina.Tests.Integration/Api/GetLogsContractTests.cs
-- [ ] T060 [P] [US3] Add integration test for DB insert to UI refresh flow with cache expiration in src/VentouxTina.Tests.Integration/UI/TripLogRefreshIntegrationTests.cs
+- [ ] T058 [P] [US3] Perform manual validation of TripLogEntry rules for timestamp, kilometers, and activity
+- [ ] T059 [P] [US3] Manually validate GET /api/logs response contract against specs/001-trip-progress-webapp/contracts/public-api.yaml
+- [ ] T060 [P] [US3] Manually validate DB insert to UI refresh flow with cache expiration behavior
 
 ### Implementation for User Story 3
 
@@ -158,12 +158,13 @@
 
 **Purpose**: Final hardening, compliance, and release readiness across stories.
 
-- [ ] T066 [P] Add OpenAPI alignment checks with implemented endpoints in specs/001-trip-progress-webapp/contracts/public-api.yaml and src/VentouxTina.Tests.Integration/Api/ContractAlignmentTests.cs
+- [ ] T066 [P] Perform manual OpenAPI alignment review for implemented endpoints against specs/001-trip-progress-webapp/contracts/public-api.yaml
 - [ ] T067 Verify docker-compose persistence behavior in src/docker-compose.yml and document results in specs/001-trip-progress-webapp/quickstart.md
-- [ ] T068 [P] Add container image validation task (chiseled base and non-root runtime) in src/VentouxTina.Web/Dockerfile and .github/workflows/ci.yml
+- [ ] T068 [P] Perform manual container image validation (chiseled base and non-root runtime) using src/VentouxTina.Web/Dockerfile
 - [ ] T069 [P] Add throttling observability counters/log fields in src/VentouxTina.Web/Program.cs
-- [ ] T070 Add integration tests for startup provisioning and pending migration execution in src/VentouxTina.Tests.Integration/Infrastructure/StartupProvisioningTests.cs
-- [ ] T071 Run full quality gates (tests, csharpier, roslynator) and capture command sequence in specs/001-trip-progress-webapp/quickstart.md
+- [ ] T070 Perform manual startup validation for provisioning and pending migration execution and document outcomes in specs/001-trip-progress-webapp/quickstart.md
+- [ ] T071 Run PoC quality gates (csharpier, roslynator, manual smoke checks) and capture command sequence in specs/001-trip-progress-webapp/quickstart.md
+- [ ] T072 Perform final localization audit across all rendered strings and client-side map labels/tooltips; document findings in specs/001-trip-progress-webapp/quickstart.md
 
 ---
 
@@ -188,7 +189,7 @@
 
 ### Within Each User Story
 
-- Tests first, must fail before implementation.
+- Manual validation evidence must be recorded before story sign-off.
 - Domain/model/validation changes before service wiring.
 - Service wiring before endpoint and UI integration.
 - Story is complete only when independent test criteria pass.
@@ -197,7 +198,7 @@
 
 - Setup tasks marked [P] can run together (T004, T005, T006, T007, T008, T009).
 - Foundational tasks marked [P] can run together (T013, T014, T015, T016, T017, T020, T021, T022, T023, T024, T026, T027, T028).
-- In each story, [P]-marked test tasks can run in parallel.
+- In each story, [P]-marked validation tasks can run in parallel.
 - In each story, [P]-marked model/component tasks can run in parallel where files differ.
 
 ---
@@ -205,10 +206,10 @@
 ## Parallel Example: User Story 1
 
 ```bash
-Task: T029 [US1] Unit tests for progress calculation edge cases
-Task: T030 [US1] Unit tests for route capping and status transitions
-Task: T031 [US1] Contract tests for GET /api/progress
-Task: T033 [US1] UI line-distance verification test
+Task: T029 [US1] Manual validation for progress calculation edge cases
+Task: T030 [US1] Manual validation for route capping and status transitions
+Task: T031 [US1] Manual contract validation for GET /api/progress
+Task: T033 [US1] Manual UI line-distance verification
 ```
 
 ```bash
@@ -242,14 +243,14 @@ Task: T038 [US1] Add map host component and Leaflet interop
    - Developer B: US2
    - Developer C: US4
    - Developer D: US3
-3. Merge after each story checkpoint with contract-test verification.
+3. Merge after each story checkpoint with documented contract validation.
 
 ---
 
 ## Notes
 
 - [P] tasks are safe for parallel execution only when file overlap is absent.
-- Every user story includes explicit test tasks and independent validation criteria.
+- Every user story includes explicit manual validation tasks and independent validation criteria.
 - Seeding via OpenRouteService script is a prerequisite before any user story execution.
 - Docker compose persistence and throttling are treated as first-class requirements, not optional hardening.
 - Keep all visible UI copy in Dutch (Belgium) across components and error states.

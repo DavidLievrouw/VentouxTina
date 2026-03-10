@@ -19,8 +19,13 @@
 - Q: Is het route-seedscript optioneel? → A: Nee, het is een prerequisite voor alle user stories en moet ook FundraisingGoal en ProjectContext met defaults provisioneren.
 - Q: Welke routeplanner gebruiken we exact? → A: OpenRouteService (gratis tier) wordt gebruikt in het seedscript.
 - Q: Zijn dark mode, hamburgernavigatie en throttling expliciete functionele requirements? → A: Ja, alle drie zijn expliciete functionele requirements.
+- Q: Moeten geautomatiseerde tests verplicht blijven voor deze fase? → A: Nee, voor deze proof-of-concept worden geen geautomatiseerde tests opgenomen; validatie gebeurt handmatig.
+- Q: Moet CI nu al verplicht voorzien worden? → A: Nee, CI wordt in deze fase niet voorzien en wordt later geëvalueerd.
+- Q: Moeten performantie-success-criteria nu al vastliggen? → A: Nee, performantiecriteria worden uitgesteld naar een latere fase.
+- Q: Moeten niet-functionele eisen nu expliciet uitgebreid worden? → A: Nee, niet-functionele detaillering valt buiten deze fase.
+- Q: Hoe borgen we volledige Nederlandstalige UI-consistentie zonder CI? → A: Voeg een finale lokalisatie-audit toe die alle gerenderde strings en client-side kaartlabels/tooltips controleert.
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Validation *(mandatory)*
 
 ### User Story 1 - Voortgang op de kaart bekijken (Priority: P1)
 
@@ -97,7 +102,7 @@ te valideren dat de lijst en voortgangsberekening automatisch de bijgewerkte waa
 - Hoe gaat het systeem om met negatieve kilometers: ongeldige regels worden geweigerd of genegeerd en niet meegeteld in de voortgang.
 - Hoe gaat het systeem om met cumulatieve kilometers boven de totale routeafstand: voortgang wordt begrensd op 100%.
 - Wat gebeurt er wanneer MariaDB tijdelijk niet bereikbaar is: de toepassing toont een duidelijke foutmelding en blijft degradeerbaar beschikbaar voor statische context.
-- Wat gebeurt er wanneer een UI-fragment onbedoeld niet-Nederlandse tekst bevat: de build/test pipeline markeert dit als afwijking.
+- Wat gebeurt er wanneer een UI-fragment onbedoeld niet-Nederlandse tekst bevat: een finale handmatige lokalisatie-audit markeert dit als afwijking, inclusief client-side kaartlabels/tooltips.
 - Wat gebeurt er wanneer migraties ontbreken of falen bij startup: de toepassing logt dit expliciet en start niet in een half-gemigreerde toestand.
 
 ## Requirements *(mandatory)*
@@ -111,8 +116,7 @@ te valideren dat de lijst en voortgangsberekening automatisch de bijgewerkte waa
 - **FR-005**: Het systeem MUST de afgelegde afstand bepalen op basis van de som van geldige logregels uit de gegevensbron.
 - **FR-006**: Het systeem MUST een voortgangsindicator in procent tonen op basis van afgelegde afstand versus totale routeafstand.
 - **FR-007**: De contextsectie MUST statische Nederlandstalige tekst (Belgie) bevatten die expliciet verwijst naar "Klimmen tegen MS".
-- **FR-007a**: De contextsectie MUST expliciet vermelden dat het project een liefdadigheidsactie/fondsenwerving is.
-- **FR-007b**: De contextsectie MUST het streefdoel van 500 euro expliciet tonen.
+- **FR-007a**: De contextsectie MUST expliciet vermelden dat het project een liefdadigheidsactie/fondsenwerving is, met een streefdoel van 500 euro.
 - **FR-008**: Het logboek MUST per regel timestamp, kilometers en activiteit tonen.
 - **FR-009**: Toegestane activiteiten MUST minimaal lopen, fietsen en wandelen ondersteunen.
 - **FR-010**: Het systeem MUST loggegevens lezen uit een MariaDB-database.
@@ -135,6 +139,7 @@ te valideren dat de lijst en voortgangsberekening automatisch de bijgewerkte waa
 - **FR-027**: De toepassing MUST een dark-mode weergave ondersteunen.
 - **FR-028**: De toepassing MUST mobiele navigatie via een hamburger-menu ondersteunen voor toegang tot alle hoofdsecties.
 - **FR-029**: De toepassing MUST throttling/rate limiting toepassen op publieke endpoints.
+- **FR-030**: Vóór oplevering MUST een finale lokalisatie-audit uitgevoerd worden op alle gerenderde UI-strings en client-side kaartlabels/tooltips om Nederlandstalige consistentie te verifiëren.
 
 ### Constitution Alignment *(mandatory)*
 
@@ -144,8 +149,7 @@ te valideren dat de lijst en voortgangsberekening automatisch de bijgewerkte waa
 - **CA-002 Canonical Progress Model**: Er is een enkele canonieke route Wachtebeke -> Mont Ventoux met
   vaste totale afstand; alle kaart- en logweergaven gebruiken dezelfde gevalideerde dataset; voortgang is
   monotone stijgend behalve expliciete correctieregels.
-- **CA-003 Test-First Evidence**: Voor elke user story worden eerst falende tests voorzien voor
-  routevoortgangsberekening, databasevalidatie en UI-weergave van vereiste secties.
+- **CA-003 PoC Validation Evidence**: In deze proof-of-concept fase wordt story-validatie handmatig uitgevoerd en gedocumenteerd; geautomatiseerde testverplichting wordt uitgesteld naar een latere fase.
 - **CA-004 Container Delivery Impact**: De feature vereist containeruitvoering als standaard distributievorm,
   met configureerbare MariaDB-connectie via omgevingsconfiguratie en lokale compose-orkestratie.
 - **CA-004a Startup Provisioning**: Startup-flow bevat database provisioning en conditionele migratie-uitvoering met duidelijke foutlogging.
@@ -170,12 +174,14 @@ te valideren dat de lijst en voortgangsberekening automatisch de bijgewerkte waa
 - De publieke pagina vereist geen gebruikersaanmelding.
 - Deze feature omvat geen online donatieverwerking; ze communiceert enkel de fondsenwervingscontext en doelstelling.
 - Activiteiten kunnen intern als gestandaardiseerde waarden worden opgeslagen, maar worden in de UI in het Nederlands getoond.
+- Deze fase is een proof-of-concept zonder verplichte CI-pipeline en zonder verplichte geautomatiseerde tests.
+- Performantie- en bredere niet-functionele detaillering worden in een latere fase uitgewerkt.
 
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
 
-- **SC-001**: 95% van paginaweergaven toont binnen 2 seconden de drie hoofdsecties volledig.
+- **SC-001**: In 100% van de handmatige smoke-validaties tonen de drie hoofdsecties (kaart, context, logboek) correct op desktop en mobiel.
 - **SC-002**: In 100% van testgevallen met geldige logdata komt het getoonde voortgangspercentage overeen met de verwachte cumulatieve kilometerberekening.
 - **SC-003**: In gebruikerstests kan minstens 90% van de deelnemers binnen 10 seconden zowel de huidige voortgang als de meest recente logactiviteit identificeren.
 - **SC-004**: Na het manueel toevoegen van een nieuwe geldige logregel in MariaDB en herladen van de pagina of na cache-expiratie (max 1 minuut) is de nieuwe regel in 100% van de gevallen zichtbaar en verwerkt in kaartvoortgang en percentage.
@@ -184,6 +190,7 @@ te valideren dat de lijst en voortgangsberekening automatisch de bijgewerkte waa
 - **SC-007**: Een lokale `docker compose up` start webapp en MariaDB succesvol, en MariaDB-data blijft behouden na herstart.
 - **SC-008**: Bij startup worden aanwezige EF Core migraties automatisch toegepast zonder manuele tussenstappen.
 - **SC-009**: Het eenmalige route-seedscript vult `TripRoute`, checkpoints, `FundraisingGoal` en `ProjectContext` met bruikbare defaults, met route/checkpointdata via OpenRouteService.
-- **SC-010**: Onder normale belasting resulteert 1-minuut cache in merkbaar minder database-reads voor progress-endpoints.
+- **SC-010**: Na een handmatige databasewijziging weerspiegelt de UI de aangepaste voortgang uiterlijk na cache-expiratie (maximaal 1 minuut).
 - **SC-011**: In 100% van de verificatietests stemt de lengte van de getekende voortgangslijn overeen met de gecumuleerde `TripLogEntry`-kilometers (met begrenzing op route-einde).
 - **SC-012**: In 100% van de UI-validaties zijn dark mode, hamburgernavigatie en throttling-gedrag aantoonbaar actief volgens de functionele requirements.
+- **SC-013**: In de finale lokalisatie-audit zijn alle gerenderde UI-strings en client-side kaartlabels/tooltips Nederlandstalig (Belgie).
