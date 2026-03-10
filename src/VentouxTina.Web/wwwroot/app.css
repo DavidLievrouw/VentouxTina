@@ -107,6 +107,8 @@ a { color: var(--color-brand); }
     color: var(--color-text);
     white-space: nowrap;
     transition: background 0.15s;
+    margin-left: 1.5rem;
+    flex-shrink: 0;
 }
 .dark-mode-toggle:hover { background: var(--color-brand-light); }
 
@@ -240,6 +242,8 @@ a { color: var(--color-brand); }
     background: var(--color-surface);
 }
 .log-table tbody tr:hover { background: var(--color-brand-light); }
+.log-table .col-numeric { text-align: right; color: var(--color-text-muted); font-variant-numeric: tabular-nums; }
+.log-table th.col-numeric { text-align: right; }
 .row-invalid td { color: var(--color-error); }
 .row-validation-error td {
     color: var(--color-error);

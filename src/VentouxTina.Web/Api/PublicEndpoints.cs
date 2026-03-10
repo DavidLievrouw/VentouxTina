@@ -56,7 +56,6 @@ public static class PublicEndpoints
                         timestamp = e.Timestamp,
                         kilometers = e.Kilometers,
                         activity = e.Activity,
-                        isCorrection = e.IsCorrection,
                     })
                 );
             }

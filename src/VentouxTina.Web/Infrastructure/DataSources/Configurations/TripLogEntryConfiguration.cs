@@ -15,6 +15,5 @@ public class TripLogEntryConfiguration : IEntityTypeConfiguration<TripLogEntry>
         builder.Property(e => e.Timestamp).IsRequired();
         builder.Property(e => e.Kilometers).IsRequired().HasPrecision(10, 3);
         builder.Property(e => e.Activity).IsRequired().HasMaxLength(50);
-        builder.Property(e => e.IsCorrection).HasDefaultValue(false);
     }
 }

@@ -1,7 +1,9 @@
 @using VentouxTina.Web.Infrastructure.DataSources
 @using VentouxTina.Web.Domain.Models
 @using VentouxTina.Web.Domain.Validation
+@using VentouxTina.Web.Domain.Services
 @inject ITripLogDataSource LogService
+@inject IProgressService ProgressService
 
 <section id="logboek" class="section log-section">
     <h2 class="section-title">Activiteitenlogboek</h2>
@@ -28,23 +30,28 @@
                     <th scope="col">Datum &amp; tijd</th>
                     <th scope="col">Activiteit</th>
                     <th scope="col">Kilometers</th>
-                    <th scope="col">Correctie</th>
+                    <th scope="col" class="col-numeric">Totaal</th>
+                    <th scope="col" class="col-numeric">%</th>
                 </tr>
             </thead>
             <tbody>
+                @{decimal running = 0m;}
                 @foreach (var entry in _entries)
                 {
+                    running += entry.Kilometers;
+                    var pct = _totalKm > 0 ? Math.Min(running / _totalKm * 100m, 100m) : 0m;
                     var validation = TripLogValidator.Validate(entry);
                     <tr class="@(validation.IsValid ? "" : "row-invalid")" title="@(validation.IsValid ? "" : validation.Error)">
                         <td>@entry.Timestamp.ToString("dd/MM/yyyy HH:mm")</td>
                         <td>@ActivityLabel(entry.Activity)</td>
                         <td>@entry.Kilometers.ToString("F1") km</td>
-                        <td>@(entry.IsCorrection ? "Ja" : "–")</td>
+                        <td class="col-numeric">@running.ToString("F1") km</td>
+                        <td class="col-numeric">@pct.ToString("F1")%</td>
                     </tr>
                     @if (!validation.IsValid)
                     {
                         <tr class="row-validation-error">
-                            <td colspan="4" role="alert">
+                            <td colspan="5" role="alert">
                                 <small>Gegevensvalidatiefout: @validation.Error</small>
                             </td>
                         </tr>
@@ -57,6 +64,7 @@
 
 @code {
     private IReadOnlyList<TripLogEntry> _entries = Array.Empty<TripLogEntry>();
+    private decimal _totalKm;
     private bool _loading = true;
     private bool _error;
 
@@ -64,7 +72,11 @@
     {
         try
         {
-            _entries = await LogService.GetEntriesAsync();
+            var entriesTask = LogService.GetEntriesAsync();
+            var projectionTask = ProgressService.GetProjectionAsync();
+            await Task.WhenAll(entriesTask, projectionTask);
+            _entries = entriesTask.Result;
+            _totalKm = projectionTask.Result?.TotalDistanceKm ?? 0m;
         }
         catch
         {

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VentouxTina.Web.Infrastructure.DataSources;
 
@@ -11,9 +12,11 @@ using VentouxTina.Web.Infrastructure.DataSources;
 namespace VentouxTina.Web.Infrastructure.DataSources.Migrations
 {
     [DbContext(typeof(VentouxTinaDbContext))]
-    partial class VentouxTinaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260310203613_RemoveIsCorrection")]
+    partial class RemoveIsCorrection
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,6 +144,9 @@ namespace VentouxTina.Web.Infrastructure.DataSources.Migrations
                     b.Property<decimal>("Kilometers")
                         .HasPrecision(10, 3)
                         .HasColumnType("decimal(10,3)");
+
+                    b.Property<int?>("SourceLine")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime(6)");
