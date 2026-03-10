@@ -162,23 +162,23 @@ $polylineJson = ($payload.polyline | ConvertTo-Json -Compress -Depth 5) -replace
 $totalKm      = $payload.totalDistanceKm
 
 $sql = @"
-INSERT IGNORE INTO trip_routes (route_id, start_name, end_name, total_distance_km, polyline_json)
+INSERT IGNORE INTO trip_routes (RouteId, StartName, EndName, TotalDistanceKm, PolylineJson)
 VALUES ('$($payload.routeId)', '$($payload.startName)', '$($payload.endName)', $totalKm, '$polylineJson');
 
-SET @route_id = (SELECT id FROM trip_routes WHERE route_id = '$($payload.routeId)');
+SET @route_id = (SELECT Id FROM trip_routes WHERE RouteId = '$($payload.routeId)');
 
 "@
 
 foreach ($cp in $payload.checkpoints) {
-    $sql += "INSERT IGNORE INTO trip_checkpoints (trip_route_id, name, cumulative_distance_km, latitude, longitude, order_index) VALUES (@route_id, '$($cp.name)', $($cp.cumulativeDistanceKm), $($cp.lat), $($cp.lon), $($cp.orderIndex));`n"
+    $sql += "INSERT IGNORE INTO trip_checkpoints (TripRouteId, Name, CumulativeDistanceKm, Latitude, Longitude, OrderIndex) VALUES (@route_id, '$($cp.name)', $($cp.cumulativeDistanceKm), $($cp.lat), $($cp.lon), $($cp.orderIndex));`n"
 }
 
 $sql += @"
 
-INSERT IGNORE INTO fundraising_goals (organization_name, goal_amount_eur, is_fundraiser, audience)
+INSERT IGNORE INTO fundraising_goals (OrganizationName, GoalAmountEur, IsFundraiser, Audience)
 VALUES ('$($payload.fundraisingGoal.organizationName)', $($payload.fundraisingGoal.goalAmountEur), $([int]$payload.fundraisingGoal.isFundraiser), '$($payload.fundraisingGoal.audience)');
 
-INSERT IGNORE INTO project_contexts (locale, headline, body_text, fundraising_goal_text)
+INSERT IGNORE INTO project_contexts (Locale, Headline, BodyText, FundraisingGoalText)
 VALUES ('$($payload.projectContext.locale)', '$($payload.projectContext.headline)', '$($payload.projectContext.bodyText)', '$($payload.projectContext.fundraisingGoalText)');
 "@
 
