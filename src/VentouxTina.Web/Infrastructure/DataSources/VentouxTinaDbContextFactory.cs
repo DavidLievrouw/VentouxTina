@@ -11,7 +11,7 @@ public class VentouxTinaDbContextFactory : IDesignTimeDbContextFactory<VentouxTi
         var optionsBuilder = new DbContextOptionsBuilder<VentouxTinaDbContext>();
         // MariaDB 11.4 — matches docker-compose image
         optionsBuilder.UseMySql(
-            "Server=localhost;Port=3306;Database=ventouxtina;User=ventouxtina;Password=ventouxtina_dev_pw;",
+            "Server=localhost;Port=3307;Database=ventouxtina;User=ventouxtina;Password=ventouxtina_dev_pw;",
             new MariaDbServerVersion(new Version(11, 4, 0)),
             mySql => mySql.SchemaBehavior(MySqlSchemaBehavior.Ignore)
         );
