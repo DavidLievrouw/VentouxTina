@@ -7,7 +7,7 @@ if (-not (Test-Path "$PWD/../backup"))
 {
     New-Item -ItemType Directory -Path "$PWD/../backup" | Out-Null
 }
-docker exec ventouxtina-mariadb-dev sh -c "exec mariadb-dump --user root --password=$password --single-transaction --routines --triggers --hex-blob --default-character-set=utf8mb4 ventouxtina" > "$PWD/../backup/Backup$( $date )_MariaDB.sql"
+docker -H ssh://dalion-host exec ventouxtina-mariadb sh -c "exec mariadb-dump --user root --password='$password' --single-transaction --routines --triggers --hex-blob --default-character-set=utf8mb4 ventouxtina" > "$PWD/../backup/Backup$( $date )_MariaDB.sql"
 
 # Restore - option 1:
 # - Run MariaDB stack
