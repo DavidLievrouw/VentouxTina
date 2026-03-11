@@ -16,17 +16,17 @@ public static class RouteProjectionService
     {
         if (string.IsNullOrWhiteSpace(polylineJson))
         {
-            return Array.Empty<double[]>();
+            return [];
         }
 
         try
         {
             return JsonSerializer.Deserialize<List<double[]>>(polylineJson, JsonOptions)
-                ?? (IReadOnlyList<double[]>)Array.Empty<double[]>();
+                ?? (IReadOnlyList<double[]>)[];
         }
         catch
         {
-            return Array.Empty<double[]>();
+            return [];
         }
     }
 }

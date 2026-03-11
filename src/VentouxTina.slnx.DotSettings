@@ -88,6 +88,7 @@ namespace $Namespace$ {
     <s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=985842C4E32644489B85A347E1654951/@KeyIndexDefined">False</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=fleetmaster/@EntryIndexedValue">True</s:Boolean>
     <s:Boolean x:Key="/Default/UserDictionary/Words/=storecove/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=Ventoux/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Vogen/@EntryIndexedValue">True</s:Boolean>
 	
 	

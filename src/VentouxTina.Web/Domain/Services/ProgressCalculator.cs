@@ -55,7 +55,7 @@ public static class ProgressCalculator
     {
         if (polyline.Count == 0 || traveledKm <= 0m || totalKm <= 0m)
         {
-            return Array.Empty<double[]>();
+            return [];
         }
 
         if (traveledKm >= totalKm)
@@ -67,6 +67,6 @@ public static class ProgressCalculator
         var cutIndex = (int)Math.Ceiling(fraction * (polyline.Count - 1));
         cutIndex = Math.Clamp(cutIndex, 1, polyline.Count);
 
-        return polyline.Take(cutIndex).ToList();
+        return [.. polyline.Take(cutIndex)];
     }
 }
